@@ -31,7 +31,7 @@ import { CircularScore } from "@/components/CircularScore";
 import { SubScoreChip } from "@/components/SubScoreChip";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
 import { DustPanel } from "@/components/DustPanel";
-import { ShareActions } from "@/components/ShareActions";
+// import { ShareActions } from "@/components/ShareActions";
 import { ScanTips } from "@/components/ScanTips";
 import type {
   DustWarning,
@@ -69,7 +69,7 @@ export function ScanView({ address }: { address: string }) {
 
   // No wallet connection in this build — every scan is watch-only. Drives a
   // muted pill on the scan view and a watermark on the share card.
-  const watchOnly = true;
+  // const watchOnly = true;
 
   // Only count scans whose address matches the current URL — guards against
   // stale store entries when the user switches wallets.
@@ -313,15 +313,15 @@ export function ScanView({ address }: { address: string }) {
           {/* Dust / poisoning panel · informational, never scored */}
           {scan && <DustPanel warnings={scan.dustWarnings} />}
 
-          {/* Share card + actions */}
-          {scan && phase === "done" && (
+          {/* Share card + actions — disabled while we rework the share flow */}
+          {/* {scan && phase === "done" && (
             <ShareActions
               address={address}
               score={scan.totalScore}
               previousScore={prevForThis ? prevForThis.totalScore : null}
               watchOnly={watchOnly}
             />
-          )}
+          )} */}
 
           <AnimatePresence>
             {phase === "error" && error && (
@@ -366,14 +366,31 @@ function titleFor(k: keyof typeof WEIGHTS): string {
 
 function PendingChip({ title, weight }: { title: string; weight: number }) {
   return (
-    <div className="flex flex-col gap-3 p-5 border border-rule-soft border-dashed bg-paper rounded-sm pulse-soft">
+    <div className="card-soft p-5 flex flex-col gap-4 pulse-soft">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] tracking-[0.2em] lowercase text-muted">
-          {title}
-        </span>
+        <span className="text-[13px] text-ink/70 truncate">{title}</span>
         <span className="text-[11px] tabular text-muted-2">w {weight}</span>
       </div>
-      <div className="font-display text-[18px] text-muted">reading…</div>
+      <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-baseline gap-1">
+            <span className="score-numeral text-[44px] leading-none tabular text-muted-2">
+              ··
+            </span>
+            <span className="text-[13px] text-muted-2 tabular">/ 100</span>
+          </div>
+          <span className="text-[12px] text-muted-2">reading…</span>
+        </div>
+        <span
+          aria-hidden
+          className="rounded-full"
+          style={{
+            width: 18,
+            height: 64,
+            background: "rgba(20,17,13,0.05)",
+          }}
+        />
+      </div>
     </div>
   );
 }
