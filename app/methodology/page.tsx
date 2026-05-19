@@ -162,7 +162,7 @@ export default function MethodologyPage() {
               Data sources
             </h2>
             <p className="text-[14px] text-ink-soft leading-relaxed max-w-[62ch]">
-              Everything below is public on chain data or a public list. Nothing
+              Everything below is public onchain data or a public list. Nothing
               is purchased from a data broker. Nothing is inferred by an ML
               model.
             </p>

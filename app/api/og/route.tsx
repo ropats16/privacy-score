@@ -55,7 +55,7 @@ function clamp0to100(n: number): number {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const rawAddress = (url.searchParams.get("address") ?? "").trim();
-  const address = rawAddress.length > 0 ? rawAddress : "—";
+  const address = rawAddress.length > 0 ? rawAddress : "none";
   const score = clamp0to100(Number(url.searchParams.get("score") ?? 0));
   const prevParam = url.searchParams.get("prev");
   const prev =
@@ -127,7 +127,7 @@ export async function GET(req: Request) {
                 backgroundColor: COLORS.rule,
               }}
             />
-            <div style={{ display: "flex" }}>90-day audit</div>
+            <div style={{ display: "flex" }}>wallet audit</div>
           </div>
 
           {/* Body row */}
@@ -311,7 +311,7 @@ export async function GET(req: Request) {
                     textTransform: "uppercase",
                   }}
                 >
-                  watch-only
+                  watch only
                 </div>
               )}
 
@@ -326,7 +326,7 @@ export async function GET(req: Request) {
                 }}
               >
                 Privacy ≠ anonymity. We show you what your wallet is already
-                showing.
+                showing the world.
               </div>
             </div>
           </div>

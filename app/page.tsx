@@ -54,9 +54,9 @@ export default function LandingPage() {
           width={1254}
           height={1254}
           priority
-          className="hidden md:block absolute left-[3%] lg:left-[6%] top-1/2 -translate-y-1/2 w-[240px] lg:w-[320px] xl:w-[380px] h-auto pointer-events-none select-none"
+          className="hidden md:block absolute left-[2%] lg:left-[4%] xl:left-[6%] top-1/2 -translate-y-1/2 w-[460px] lg:w-[560px] xl:w-[640px] h-auto pointer-events-none select-none z-0"
         />
-        <div className="w-full max-w-[860px] -mt-8">
+        <div className="relative z-10 w-full max-w-[860px] -mt-8">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}

@@ -12,7 +12,7 @@ export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
           Nothing pressing to fix.
         </p>
         <p className="text-[13px] text-muted mt-2 max-w-[52ch]">
-          No factor scored below the leak-reason threshold this scan. Re-scan
+          No factor scored below the leak threshold this scan. Re scan
           after future activity to keep an eye on drift.
         </p>
       </div>

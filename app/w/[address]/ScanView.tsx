@@ -29,7 +29,6 @@ import { shortAddress } from "@/lib/resolve";
 import { useScanStore } from "@/lib/scan-store";
 import { ScoreNumeral } from "@/components/ScoreNumeral";
 import { SubScoreChip } from "@/components/SubScoreChip";
-import { FactorProgressList } from "@/components/FactorProgressList";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
 import { DustPanel } from "@/components/DustPanel";
 import { ShareActions } from "@/components/ShareActions";
@@ -37,18 +36,8 @@ import type {
   DustWarning,
   Factor,
   FactorKey,
-  FactorProgress,
   Scan,
 } from "@/lib/types";
-
-const INITIAL_PROGRESS: FactorProgress[] = [
-  { key: "identity", title: "Identity exposure", status: "pending" },
-  { key: "kyc", title: "KYC distance", status: "pending" },
-  { key: "cluster", title: "Cluster footprint", status: "pending" },
-  { key: "connected", title: "Connected apps", status: "pending" },
-  { key: "wealth", title: "Visible wealth", status: "pending" },
-  { key: "surveillance", title: "Surveillance coverage", status: "pending" },
-];
 
 type Phase = "scanning" | "done" | "error";
 
@@ -57,7 +46,6 @@ const MISSING_KEY_MSG =
 
 export function ScanView({ address }: { address: string }) {
   const hasKey = HELIUS_KEY.length > 0;
-  const [progress, setProgress] = useState<FactorProgress[]>(INITIAL_PROGRESS);
   const [phase, setPhase] = useState<Phase>(hasKey ? "scanning" : "error");
   const [error, setError] = useState<string | null>(
     hasKey ? null : MISSING_KEY_MSG
@@ -69,12 +57,11 @@ export function ScanView({ address }: { address: string }) {
   const sessionKey = `${address}::${trigger}`;
   const [session, setSession] = useState(sessionKey);
 
-  // Reset progress + phase during render when the session changes (initial
-  // mount-after-reScan or address swap). Avoids cascading renders that would
-  // happen if we set this state inside an effect.
+  // Reset phase during render when the session changes (initial mount after
+  // reScan or address swap). Avoids cascading renders that would happen if
+  // we set this state inside an effect.
   if (session !== sessionKey) {
     setSession(sessionKey);
-    setProgress(INITIAL_PROGRESS);
     setPhase(hasKey ? "scanning" : "error");
     setError(hasKey ? null : MISSING_KEY_MSG);
   }
@@ -93,7 +80,7 @@ export function ScanView({ address }: { address: string }) {
     if (!hasKey) return;
     const ac = new AbortController();
 
-    runScan(address, ac.signal, setProgress)
+    runScan(address, ac.signal)
       .then((scan) => {
         if (ac.signal.aborted) return;
         setScan(scan);
@@ -133,12 +120,6 @@ export function ScanView({ address }: { address: string }) {
     return map;
   }, [prevForThis]);
 
-  const previousScores = useMemo(() => {
-    const out: Partial<Record<FactorKey, number>> = {};
-    for (const [k, f] of prevFactorByKey) out[k] = f.score;
-    return out;
-  }, [prevFactorByKey]);
-
   const totalDelta =
     scan && prevForThis ? scan.totalScore - prevForThis.totalScore : null;
 
@@ -161,29 +142,53 @@ export function ScanView({ address }: { address: string }) {
       <main className="flex-1 px-5 md:px-14 py-10 md:py-14">
         <div className="w-full max-w-[1080px] mx-auto flex flex-col gap-14">
           {/* Address + window meta */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted flex-wrap">
-              <span aria-hidden className="w-8 h-px bg-rule" />
-              <span>90-day audit</span>
-              <span aria-hidden className="text-muted-2">·</span>
-              <span className="lowercase tracking-normal text-[12px] not-italic">
-                last {windowReadable()}
-              </span>
-              <span aria-hidden className="text-muted-2">·</span>
-              <span
-                className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
-                title="Read-only audit. Share cards are watermarked."
-              >
-                <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
-                watch-only
-              </span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6">
+            <div className="flex flex-col gap-3 min-w-0">
+              <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted flex-wrap">
+                <span aria-hidden className="w-8 h-px bg-rule" />
+                <span>wallet audit</span>
+                <span aria-hidden className="text-muted-2">·</span>
+                <span className="lowercase tracking-normal text-[12px] not-italic">
+                  last {windowReadable()}
+                </span>
+                <span aria-hidden className="text-muted-2">·</span>
+                <span
+                  className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
+                  title="Read only audit. Share cards are watermarked."
+                >
+                  <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
+                  watch only
+                </span>
+              </div>
+              <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
+                <span className="font-italic-serif text-muted">Your wallet&rsquo;s privacy score · </span>
+                <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
+                  {shortAddress(address, 6, 6)}
+                </span>
+              </h2>
             </div>
-            <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
-              <span className="font-italic-serif text-muted">audit · </span>
-              <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
-                {shortAddress(address, 6, 6)}
-              </span>
-            </h2>
+            <div className="md:ml-auto md:self-end shrink-0">
+              <button
+                type="button"
+                onClick={reScan}
+                disabled={phase === "scanning"}
+                className="inline-flex items-center gap-2 text-[12px] tracking-[0.2em] uppercase text-ink hover:text-accent disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
+              >
+                <span
+                  aria-hidden
+                  className={`inline-block ${phase === "scanning" ? "animate-spin" : ""}`}
+                >
+                  ↻
+                </span>
+                <span>
+                  {phase === "scanning"
+                    ? "Re scanning…"
+                    : prevForThis
+                      ? "Re scan"
+                      : "Re scan after a fix"}
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Hero score card */}
@@ -203,7 +208,7 @@ export function ScanView({ address }: { address: string }) {
                       />
                     ) : phase === "error" ? (
                       <span className="score-numeral text-[96px] sm:text-[120px] md:text-[180px] text-muted-2">
-                        ——
+                        ··
                       </span>
                     ) : (
                       <motion.span
@@ -270,39 +275,9 @@ export function ScanView({ address }: { address: string }) {
                 <p className="font-italic-serif text-[22px] md:text-[26px] leading-snug text-ink-soft max-w-[34ch]">
                   {heroCopy(phase, scan, totalDelta)}
                 </p>
-                <p className="text-[13px] text-muted max-w-[44ch]">
-                  All six factors are live this phase — Identity, KYC, Cluster,
-                  Connected apps, Visible wealth, and Surveillance. Tap any
-                  chip to see its rubric and raw signals.
-                </p>
-                <div className="pt-2">
-                  <button
-                    type="button"
-                    onClick={reScan}
-                    disabled={phase === "scanning"}
-                    className="inline-flex items-center gap-2 text-[12px] tracking-[0.2em] uppercase text-ink hover:text-accent disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
-                  >
-                    <span
-                      aria-hidden
-                      className={`inline-block ${phase === "scanning" ? "animate-spin" : ""}`}
-                    >
-                      ↻
-                    </span>
-                    <span>
-                      {phase === "scanning"
-                        ? "Re-scanning…"
-                        : prevForThis
-                          ? "Re-scan"
-                          : "Re-scan after a fix"}
-                    </span>
-                  </button>
-                </div>
               </div>
             </div>
           </section>
-
-          {/* Dust / poisoning panel — shown before leak reasons, never scored */}
-          {scan && <DustPanel warnings={scan.dustWarnings} />}
 
           {/* Sub-scores */}
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
@@ -325,13 +300,13 @@ export function ScanView({ address }: { address: string }) {
             )}
           </section>
 
-          {/* Top leak reasons */}
+          {/* Try these fixes */}
           {scan && (
             <section className="flex flex-col gap-5">
               <div className="flex items-baseline justify-between gap-4">
                 <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
                   <span aria-hidden className="w-8 h-px bg-rule" />
-                  <span>Top leak reasons</span>
+                  <span>Try these fixes</span>
                 </div>
                 <span className="text-[12px] text-muted-2">
                   ranked by score lift
@@ -340,6 +315,9 @@ export function ScanView({ address }: { address: string }) {
               <LeakReasonsList reasons={scan.leakReasons} />
             </section>
           )}
+
+          {/* Dust / poisoning panel · informational, never scored */}
+          {scan && <DustPanel warnings={scan.dustWarnings} />}
 
           {/* Share card + actions */}
           {scan && phase === "done" && (
@@ -351,28 +329,18 @@ export function ScanView({ address }: { address: string }) {
             />
           )}
 
-          {/* Per-factor progress list */}
-          <section className="flex flex-col gap-5">
-            <h3 className="text-[12px] tracking-[0.22em] uppercase text-muted">
-              Scan trace
-            </h3>
-            <FactorProgressList
-              items={progress}
-              previousScores={previousScores}
-            />
-            <AnimatePresence>
-              {phase === "error" && error && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="border border-[color:var(--score-low)]/40 bg-[color:var(--score-low)]/5 p-4 rounded-sm text-[14px] text-[color:var(--score-low)]"
-                >
-                  {error}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </section>
+          <AnimatePresence>
+            {phase === "error" && error && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="border border-[color:var(--score-low)]/40 bg-[color:var(--score-low)]/5 p-4 rounded-sm text-[14px] text-[color:var(--score-low)]"
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
 
@@ -424,13 +392,13 @@ function heroCopy(
   if (phase === "error") return "Something stopped the audit before we could read the chain.";
   if (phase === "scanning") {
     return scan
-      ? "Re-reading the last ninety days. Hold tight…"
-      : "Reading ninety days of public on-chain activity…";
+      ? "Re reading the last ninety days. Hold tight…"
+      : "Reading ninety days of public onchain activity…";
   }
-  if (!scan) return "Reading ninety days of public on-chain activity…";
+  if (!scan) return "Reading ninety days of public onchain activity…";
   if (totalDelta !== null) {
     if (totalDelta > 0)
-      return `Quieter than last time — you tightened ${totalDelta} point${totalDelta === 1 ? "" : "s"}.`;
+      return `Quieter than last time. You tightened ${totalDelta} point${totalDelta === 1 ? "" : "s"}.`;
     if (totalDelta < 0)
       return `Slipped ${Math.abs(totalDelta)} point${totalDelta === -1 ? "" : "s"} since last scan.`;
     return "No change since last scan. Pick a top reason to tighten.";
@@ -471,31 +439,13 @@ function windowReadable(): string {
   const start = new Date(Date.now() - 90 * 24 * 3600 * 1000);
   const fmt = (d: Date) =>
     d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  return `${fmt(start)} – ${fmt(now)}`;
+  return `${fmt(start)} to ${fmt(now)}`;
 }
 
 async function runScan(
   address: string,
-  signal: AbortSignal,
-  setProgress: React.Dispatch<React.SetStateAction<FactorProgress[]>>
+  signal: AbortSignal
 ) {
-  const markRunning = (keys: string[]) =>
-    setProgress((prev) =>
-      prev.map((p) => (keys.includes(p.key) ? { ...p, status: "running" } : p))
-    );
-  const markDone = (key: string, score: number) =>
-    setProgress((prev) =>
-      prev.map((p) => (p.key === key ? { ...p, status: "done", score } : p))
-    );
-  const markError = (key: string) =>
-    setProgress((prev) =>
-      prev.map((p) => (p.key === key ? { ...p, status: "error" } : p))
-    );
-
-  // Fan out the cheap, independent calls immediately. Connected + surveillance
-  // wait on cluster (they derive from its tx scan). Identity runs in parallel.
-  markRunning(["identity", "kyc", "cluster", "wealth"]);
-
   const clusterPromise = fetchClusterSignals(address, { signal });
   const ofacPromise = fetchOfacSet({ signal }).catch(() => ({
     set: new Set<string>(),
@@ -520,7 +470,6 @@ async function runScan(
         windowDays: scored.windowDays,
       },
     };
-    markDone("cluster", score);
     return factor;
   });
 
@@ -539,17 +488,12 @@ async function runScan(
           hops: scored.hops,
           nearestCex: scored.nearestCex,
           distanceLabel: scored.distanceLabel,
-          linkVia: signals.linkVia ?? "—",
+          linkVia: signals.linkVia ?? "none",
           cexAddressesChecked: signals.cexAddressesChecked,
           hop1Traversed: signals.hop1Traversed,
         },
       };
-      markDone("kyc", score);
       return factor;
-    })
-    .catch((err) => {
-      markError("kyc");
-      throw err;
     });
 
   const wealthPromise = fetchWealthSignals(address, { signal })
@@ -568,12 +512,7 @@ async function runScan(
           unpricedAssets: scored.unpricedAssets,
         },
       };
-      markDone("wealth", score);
       return factor;
-    })
-    .catch((err) => {
-      markError("wealth");
-      throw err;
     });
 
   const identityPromise = fetchIdentitySignals(address, { signal })
@@ -592,10 +531,9 @@ async function runScan(
           namesOwned: scored.namesOwned,
           exposedRecords: scored.exposedRecords,
           nameMatchesHandle: scored.nameMatchesHandle,
-          names: signals.names.map((n) => n.fullName).join(", ") || "—",
+          names: signals.names.map((n) => n.fullName).join(", ") || "none",
         },
       };
-      markDone("identity", score);
       return factor;
     })
     .catch((err) => {
@@ -616,17 +554,14 @@ async function runScan(
           namesOwned: scored.namesOwned,
           exposedRecords: scored.exposedRecords,
           nameMatchesHandle: scored.nameMatchesHandle,
-          names: "lookup failed — treated as no presence",
+          names: "lookup failed, treated as no presence",
         },
       };
-      markDone("identity", score);
       return factor;
     });
 
   // Connected + Surveillance derive from cluster's tx scan.
   const dependentPromise = clusterPromise.then(async (clusterSignals) => {
-    markRunning(["connected", "surveillance"]);
-
     const connectedSignalsPromise = fetchConnectedSignals(
       address,
       clusterSignals.peers,
@@ -660,7 +595,6 @@ async function runScan(
         totalLive: cScored.totalLive,
       },
     };
-    markDone("connected", cScore);
 
     const { score: sScore, signals: sScored } = scoreSurveillance({
       inboundFlagged: surveillanceSignals.inboundFlagged,
@@ -679,7 +613,6 @@ async function runScan(
         listSize: ofac.set.size,
       },
     };
-    markDone("surveillance", sScore);
 
     return { connectedFactor, surveillanceFactor, dust };
   });

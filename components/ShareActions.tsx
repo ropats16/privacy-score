@@ -1,9 +1,9 @@
 "use client";
 
 // Share actions for a completed scan: download the PNG card and post to X.
-// Both routes pass everything as query params — we never persist anything.
+// Both routes pass everything as query params, we never persist anything.
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type Props = {
   address: string;
@@ -11,6 +11,8 @@ type Props = {
   previousScore: number | null;
   watchOnly: boolean;
 };
+
+type ImgState = "loading" | "ready" | "error";
 
 export function ShareActions({
   address,
@@ -21,13 +23,12 @@ export function ShareActions({
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const ogParams = new URLSearchParams({
-    address,
-    score: String(score),
-  });
-  if (previousScore !== null) ogParams.set("prev", String(previousScore));
-  if (watchOnly) ogParams.set("watchOnly", "1");
-  const ogPath = `/api/og?${ogParams.toString()}`;
+  const ogPath = useMemo(() => {
+    const p = new URLSearchParams({ address, score: String(score) });
+    if (previousScore !== null) p.set("prev", String(previousScore));
+    if (watchOnly) p.set("watchOnly", "1");
+    return `/api/og?${p.toString()}`;
+  }, [address, score, previousScore, watchOnly]);
 
   const delta =
     previousScore !== null && previousScore !== score
@@ -72,26 +73,19 @@ export function ShareActions({
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start min-w-0">
         {/* Preview */}
-        <div className="md:col-span-7">
-          <div className="relative border border-rule bg-paper-2/40 rounded-sm overflow-hidden">
-            {/* Use an unoptimised img: this is a dynamic PNG, optimisation
-                would defeat the rendered-on-demand promise. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={ogPath}
-              alt={`Privacy Score share card for ${shortFile(address)} — ${score} / 100`}
-              width={1200}
-              height={630}
-              className="w-full h-auto block"
-            />
-          </div>
+        <div className="md:col-span-7 min-w-0">
+          <SharePreview
+            key={ogPath}
+            ogPath={ogPath}
+            alt={`Privacy Score share card for ${shortFile(address)}, ${score} / 100`}
+          />
         </div>
 
         {/* Actions */}
         <div className="md:col-span-5 flex flex-col gap-4">
           <p className="font-italic-serif text-[20px] leading-snug text-ink-soft max-w-[36ch]">
             Save the card, or post it on X with one tap. The image is rendered
-            from the URL — no copy of your wallet sits on our servers.
+            from the URL. No copy of your wallet sits on our servers.
           </p>
 
           <div className="flex flex-col gap-3">
@@ -123,7 +117,7 @@ export function ShareActions({
 
           <p className="text-[12px] text-muted leading-relaxed max-w-[44ch]">
             <span className="italic">Privacy ≠ anonymity.</span> v1 ships
-            guidance and curated tools. One-tap in-app fixes ship in v1.5.
+            guidance and curated tools. One tap fixes ship in v1.5.
           </p>
         </div>
       </div>
@@ -131,8 +125,54 @@ export function ShareActions({
   );
 }
 
+function SharePreview({ ogPath, alt }: { ogPath: string; alt: string }) {
+  const [state, setState] = useState<ImgState>("loading");
+  return (
+    <div
+      className="relative border border-rule bg-paper-2/40 rounded-sm overflow-hidden"
+      style={{ aspectRatio: "1200 / 630" }}
+    >
+      {state !== "error" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={ogPath}
+          alt={alt}
+          width={1200}
+          height={630}
+          loading="eager"
+          decoding="async"
+          onLoad={() => setState("ready")}
+          onError={() => setState("error")}
+          className={`w-full h-auto block transition-opacity duration-300 ${
+            state === "ready" ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ) : (
+        <a
+          href={ogPath}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-[13px] text-muted hover:text-ink transition-colors"
+        >
+          <span className="font-italic-serif text-[18px] text-ink-soft">
+            Card couldn&rsquo;t render inline.
+          </span>
+          <span className="underline decoration-rule decoration-1 underline-offset-[5px]">
+            open card in a new tab ↗
+          </span>
+        </a>
+      )}
+      {state === "loading" && (
+        <div className="absolute inset-0 flex items-center justify-center text-[11px] tracking-[0.22em] uppercase text-muted-2 pulse-soft">
+          rendering card…
+        </div>
+      )}
+    </div>
+  );
+}
+
 function shortFile(addr: string): string {
-  return addr.length > 10 ? `${addr.slice(0, 4)}-${addr.slice(-4)}` : addr;
+  return addr.length > 10 ? `${addr.slice(0, 4)}_${addr.slice(-4)}` : addr;
 }
 
 function buildTweetCopy({
@@ -147,7 +187,7 @@ function buildTweetCopy({
     delta !== null && delta > 0
       ? ` Just tightened +${delta} points.`
       : delta !== null && delta < 0
-        ? ` Slipped ${delta} points — re-tightening.`
+        ? ` Slipped ${delta} points, re tightening.`
         : "";
   return `${base}${middle} Audit yours →`;
 }

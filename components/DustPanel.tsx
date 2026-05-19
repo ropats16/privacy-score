@@ -30,21 +30,21 @@ export function DustPanel({ warnings }: { warnings: DustWarning[] }) {
             <span>{warnings.length} flagged</span>
           </div>
           <h3 className="font-display text-[22px] md:text-[26px] leading-tight text-ink">
-            Dust drops & address-poisoning attempts.
+            Dust drops & address poisoning attempts.
           </h3>
           <p className="text-[14px] leading-[1.55] text-ink-soft max-w-[64ch]">
-            These addresses appear in your 90-day history because{" "}
+            These addresses appear in your 90 day history because{" "}
             <em className="font-italic-serif">they</em> sent to{" "}
-            <em className="font-italic-serif">you</em> &mdash; not the other way
+            <em className="font-italic-serif">you</em>, not the other way
             around. They&rsquo;re spam designed to lure a return transaction or
-            trick you into copy-pasting a look-alike address. They don&rsquo;t
+            trick you into copy pasting a lookalike address. They don&rsquo;t
             affect your score. Do not interact.
           </p>
 
           {poisoning.length > 0 && (
             <div className="flex flex-col gap-2 mt-2">
               <div className="text-[11px] tracking-[0.22em] uppercase text-muted">
-                Address-poisoning look-alikes
+                Address poisoning lookalikes
               </div>
               <ul className="flex flex-col gap-1">
                 {poisoning.map((w) => (

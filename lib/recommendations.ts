@@ -1,90 +1,56 @@
 // Curated external tool/guide links per leak reason.
 //
-// Curation policy (audited in Phase 7):
-//   • Every factor key must have ≥1 entry.
-//   • Links go to official docs, established privacy explainers, or
-//     well-known utilities (Bonfida SNS, Revoke.cash, Sol-Incinerator,
-//     Phantom help, OFAC official source).
+// Curation policy:
+//   • Every factor key gets exactly one direct link to a Solana privacy tool.
+//   • Priority list: Umbra (umbraprivacy.com), MagicBlock
+//     (magicblock.xyz), Revoke.cash. We only fall back to other tools when
+//     none of those three fit the leak type.
 //   • NO mixers, tumblers, or anything that could be construed as
-//     sanctions-evasion guidance — even if some users might want it.
-//     Surveillance recommendations point at official lookup tools, not
-//     at evasion.
+//     sanctions evasion guidance.
 //   • `affiliate` is reserved for future referral monetization. Empty
 //     in v1 across every link.
-//
-// Methodology page reads this same file, so additions show up in the
-// public surface automatically.
 
 import type { FactorKey, ToolLink } from "./types";
 
 export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   identity: [
     {
-      label: "Bonfida SNS — manage records",
-      url: "https://sns.id/",
+      label: "Umbra · private payments on Solana",
+      url: "https://umbraprivacy.com/",
       blurb:
-        "Edit or delete public records (twitter, url, email) attached to your .sol name. Removing these unties the on-chain handle from your real-world identity.",
-    },
-    {
-      label: "Wallet segmentation primer",
-      url: "https://officercia.mirror.xyz/yYpgtuhYUbCRZ8MmrcEjlktBu9bND8oWvkM_M3vT_2A",
-      blurb:
-        "If a name is already widely linked to you, move sensitive activity to a fresh wallet without a name attached.",
+        "Route sensitive activity through Umbra so your named wallet stops being the address that touches everything.",
     },
   ],
   kyc: [
     {
-      label: "Wallet segmentation primer",
-      url: "https://officercia.mirror.xyz/yYpgtuhYUbCRZ8MmrcEjlktBu9bND8oWvkM_M3vT_2A",
+      label: "Umbra · private payments on Solana",
+      url: "https://umbraprivacy.com/",
       blurb:
-        "Why one wallet per intent matters, and how to set up fresh wallets without leaking metadata.",
-    },
-    {
-      label: "Phantom: create a separate wallet",
-      url: "https://help.phantom.com/hc/en-us/articles/4406388623251-How-do-I-create-a-new-wallet-on-Phantom",
-      blurb: "Official walkthrough for spinning up a clean wallet.",
+        "Umbra breaks the straight line from a KYC'd CEX deposit to the wallet you actually use.",
     },
   ],
   cluster: [
     {
-      label: "Wallet segmentation primer",
-      url: "https://officercia.mirror.xyz/yYpgtuhYUbCRZ8MmrcEjlktBu9bND8oWvkM_M3vT_2A",
+      label: "MagicBlock · ephemeral wallets and rollups",
+      url: "https://www.magicblock.xyz/",
       blurb:
-        "Practical guidance for splitting trading, NFTs, and payments across distinct wallets.",
-    },
-    {
-      label: "Solana account cleanup (Sol-Incinerator)",
-      url: "https://sol-incinerator.com/",
-      blurb:
-        "Close empty token accounts to reduce the on-chain surface tied to this address.",
+        "Push high frequency activity (trading, NFTs, app interactions) onto MagicBlock so it doesn't pile up against one address.",
     },
   ],
   connected: [
     {
-      label: "Revoke.cash (Solana)",
+      label: "Revoke.cash for Solana",
       url: "https://revoke.cash/solana",
       blurb:
-        "Enumerate and revoke every live SPL token delegation. The canonical tool for cleaning up standing permissions.",
-    },
-    {
-      label: "Solana stake authority docs",
-      url: "https://solana.com/docs/economics/staking",
-      blurb:
-        "Reference for moving stake / withdrawer authorities back to addresses you control.",
+        "Enumerate every live SPL token delegation on this wallet and revoke the ones you no longer use.",
     },
   ],
   wealth: [
     {
-      label: "Cold-storage hardware wallets",
-      url: "https://help.phantom.com/hc/en-us/articles/4406388623251-Using-a-hardware-wallet-with-Phantom",
+      label: "Umbra · private payments on Solana",
+      url: "https://umbraprivacy.com/",
       blurb:
-        "How to pair a Ledger with Phantom and shift long-hold balances off your hot wallet.",
-    },
-    {
-      label: "Wallet segmentation primer",
-      url: "https://officercia.mirror.xyz/yYpgtuhYUbCRZ8MmrcEjlktBu9bND8oWvkM_M3vT_2A",
-      blurb:
-        "Why one wallet per intent matters, and how to split day-to-day from long-hold.",
+        "Move long hold value off this address with Umbra so your visible balance stops advertising you as a target.",
     },
   ],
   surveillance: [
@@ -92,13 +58,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
       label: "OFAC SDN list (official source)",
       url: "https://sanctionssearch.ofac.treas.gov/",
       blurb:
-        "The canonical U.S. sanctions list. Use this to verify whether an address you saw is actually flagged.",
-    },
-    {
-      label: "Chainalysis sanctions API documentation",
-      url: "https://public.chainalysis.com/api/v1/address/",
-      blurb:
-        "Independent reference data on sanctioned addresses, useful for cross-checking exposure.",
+        "Verify whether the address you saw is actually flagged before taking any action.",
     },
   ],
 };

@@ -19,7 +19,7 @@ export const RUBRICS: Rubric[] = [
     title: "Identity exposure",
     weight: WEIGHTS.identity,
     measures:
-      "How much your wallet's naming presence ties it to a real world identity. Owning a name is fine. Populating that name with twitter, email, or website records is what dox'es the wallet.",
+      "How much your wallet's naming presence ties it to an offline identity. Owning a name is fine. Populating that name with twitter, email, or website records is what dox'es the wallet.",
     steps: [
       {
         when: "No .sol or alt TLD name owned",
