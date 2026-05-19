@@ -378,10 +378,7 @@ export function ScanView({ address }: { address: string }) {
 
       <footer className="px-8 md:px-14 pb-8 pt-10">
         <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
-          <div>
-            <span className="italic">Privacy ≠ anonymity.</span>{" "}
-            We don&rsquo;t hide you. We show you what&rsquo;s already public.
-          </div>
+          <div>© Sneakpeek 2026</div>
         </div>
       </footer>
     </div>

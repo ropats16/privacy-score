@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { resolveAddressInput, shortAddress } from "@/lib/resolve";
@@ -35,14 +36,26 @@ export default function LandingPage() {
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
         <Link href="/" className="flex items-center gap-2 group">
-          <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
+          <span
+            aria-hidden
+            className="inline-block w-2.5 h-2.5 rounded-full bg-ink"
+          />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
             sneakpeek
           </span>
         </Link>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-5 md:px-14 py-10 md:py-0">
+      <main className="relative flex-1 flex items-center justify-center px-5 md:px-14 py-10 md:py-0">
+        <Image
+          src="/character_1.png"
+          alt=""
+          aria-hidden
+          width={1254}
+          height={1254}
+          priority
+          className="hidden md:block absolute left-[3%] lg:left-[6%] top-1/2 -translate-y-1/2 w-[240px] lg:w-[320px] xl:w-[380px] h-auto pointer-events-none select-none"
+        />
         <div className="w-full max-w-[860px] -mt-8">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -51,10 +64,18 @@ export default function LandingPage() {
             className="flex flex-col gap-10"
           >
             <h1 className="font-display text-[44px] sm:text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
-              See what your wallet
+              A privacy checkup
               <br />
-              <span className="font-italic-serif text-ink">is quietly showing.</span>
+              <span className="font-italic-serif text-ink">
+                for your wallet.
+              </span>
             </h1>
+
+            <p className="font-sans text-[15px] sm:text-[16px] leading-[1.6] text-muted max-w-[640px] -mt-4">
+              We&rsquo;ll spend about thirty seconds reading 3 months of public
+              onchain activity and give you a privacy score between 0 and 100.
+              Higher means more private. Learn privacy by doing.
+            </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <div className="flex items-end gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">
@@ -77,11 +98,13 @@ export default function LandingPage() {
                   disabled={busy || !value.trim()}
                   className="font-display text-[18px] sm:text-[20px] md:text-[22px] leading-none text-ink hover:italic transition-[font-style] disabled:opacity-40 focus-ring whitespace-nowrap"
                 >
-                  {busy ? "resolving…" : "audit →"}
+                  {busy ? "resolving…" : "check score →"}
                 </button>
               </div>
               {error && (
-                <p className="text-[14px] text-[color:var(--score-low)]">{error}</p>
+                <p className="text-[14px] text-[color:var(--score-low)]">
+                  {error}
+                </p>
               )}
             </form>
 
@@ -95,7 +118,9 @@ export default function LandingPage() {
                   <span className="font-mono text-[12px]">
                     {shortAddress(lastScan.address, 4, 4)}
                   </span>
-                  <span aria-hidden className="text-muted-2">·</span>
+                  <span aria-hidden className="text-muted-2">
+                    ·
+                  </span>
                   <span className="tabular">{lastScan.totalScore}/100</span>
                   <span aria-hidden>↗</span>
                 </Link>
@@ -107,14 +132,12 @@ export default function LandingPage() {
 
       <footer className="px-8 md:px-14 pb-8 pt-16">
         <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
-          <div>
-            <span className="italic">Privacy ≠ anonymity.</span>{" "}
-            <span>
-              We don&rsquo;t hide you. We show you what&rsquo;s already public.
-            </span>
-          </div>
+          <div>© Sneakpeek 2026</div>
           <div className="flex gap-6">
-            <Link href="/methodology" className="hover:text-ink transition-colors">
+            <Link
+              href="/methodology"
+              className="hover:text-ink transition-colors font-semibold"
+            >
               How the score is built
             </Link>
           </div>

@@ -2,7 +2,7 @@
 
 :root {
   /* Warm editorial palette */
-  --paper: #f1ede4;
+  --paper: #FFFFFF;
   --paper-2: #ebe6d8;
   --ink: #14110d;
   --ink-soft: #2b261e;
@@ -31,7 +31,7 @@
   --color-accent: var(--accent);
 
   --font-display: var(--font-instrument-serif);
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -42,7 +42,7 @@ body {
 }
 
 body {
-  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
