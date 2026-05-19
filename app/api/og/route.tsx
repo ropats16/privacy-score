@@ -117,7 +117,7 @@ export async function GET(req: Request) {
               }}
             />
             <div style={{ display: "flex", color: COLORS.inkSoft }}>
-              PrivacyScore
+              sneakpeek
             </div>
             <div
               style={{
@@ -399,7 +399,7 @@ export async function GET(req: Request) {
               marginTop: 8,
             }}
           >
-            PrivacyScore · {shortAddress(address, 4, 4)}
+            sneakpeek · {shortAddress(address, 4, 4)}
           </div>
         </div>
       ),

@@ -148,7 +148,7 @@ export function ScanView({ address }: { address: string }) {
         <Link href="/" className="flex items-center gap-2 group">
           <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
-            PrivacyScore
+            sneakpeek
           </span>
         </Link>
         <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">

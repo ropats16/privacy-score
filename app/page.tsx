@@ -37,7 +37,7 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-2 group">
           <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
-            PrivacyScore
+            sneakpeek
           </span>
         </Link>
       </header>
@@ -50,28 +50,11 @@ export default function LandingPage() {
             transition={{ duration: 0.7, ease: [0.2, 0.7, 0.1, 1] }}
             className="flex flex-col gap-10"
           >
-            <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
-              <span aria-hidden className="w-8 h-px bg-rule" />
-              <span>An audit, not a verdict</span>
-            </div>
-
             <h1 className="font-display text-[44px] sm:text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
               See what your wallet
               <br />
               <span className="font-italic-serif text-ink">is quietly showing.</span>
             </h1>
-
-            <p className="max-w-[52ch] text-[16px] sm:text-[17px] md:text-[18px] leading-[1.55] text-ink-soft">
-              Paste any Solana address. We&rsquo;ll spend about thirty seconds reading
-              ninety days of public on-chain activity and give you one number
-              between 0 and 100. Higher means more private. The math is open.
-            </p>
-            <p className="max-w-[52ch] text-[14px] leading-[1.6] text-muted">
-              <span className="italic text-ink-soft">Privacy ≠ anonymity.</span>{" "}
-              We don&rsquo;t hide you — we show you what&rsquo;s already public,
-              in plain English, with curated fixes you do in tools you already
-              trust. One-tap in-app fixes ship in v1.5.
-            </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <div className="flex items-end gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">
@@ -100,9 +83,6 @@ export default function LandingPage() {
               {error && (
                 <p className="text-[14px] text-[color:var(--score-low)]">{error}</p>
               )}
-              <p className="text-[13px] text-muted">
-                Read-only. No wallet connection. Nothing is stored.
-              </p>
             </form>
 
             {lastScan && (

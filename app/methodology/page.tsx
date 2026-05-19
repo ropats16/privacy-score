@@ -55,7 +55,7 @@ export default function MethodologyPage() {
         <Link href="/" className="flex items-center gap-2">
           <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
-            PrivacyScore
+            sneakpeek
           </span>
         </Link>
         <nav className="text-[13px] text-muted">

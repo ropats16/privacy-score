@@ -44,7 +44,7 @@ export async function GET() {
 
   try {
     const res = await fetch(SDN_URL, {
-      headers: { "user-agent": "PrivacyScore/1.0" },
+      headers: { "user-agent": "sneakpeek/1.0" },
       next: { revalidate: 60 * 60 * 24 * 7 },
     });
     if (!res.ok) throw new Error(`SDN fetch failed: ${res.status}`);

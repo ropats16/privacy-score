@@ -23,7 +23,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "PrivacyScore — see what your Solana wallet shows",
+  title: "sneakpeek — see what your Solana wallet shows",
   description:
     "Audit any Solana wallet. Get a Privacy Score 0–100, understand the leaks in plain English, fix them.",
 };

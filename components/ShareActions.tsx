@@ -46,7 +46,7 @@ export function ShareActions({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `privacy-score-${shortFile(address)}-${score}.png`;
+      a.download = `sneakpeek-${shortFile(address)}-${score}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
