@@ -141,7 +141,7 @@ export default function MethodologyPage() {
                   className="card-soft px-6 md:px-8 py-6 md:py-7 flex flex-col gap-5"
                 >
                   <header className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-[22px] md:text-[26px] leading-tight text-ink tracking-[-0.015em]">
+                    <h3 className="font-display text-[22px] md:text-[26px] leading-tight tracking-[-0.015em] text-[#008cff]">
                       {r.title}
                     </h3>
                     <span className="weight-pill mt-1">{r.weight}%</span>
