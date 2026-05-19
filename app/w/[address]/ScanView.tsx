@@ -142,13 +142,11 @@ export function ScanView({ address }: { address: string }) {
 
       <main className="flex-1 px-5 md:px-14 py-10 md:py-14">
         <div className="w-full max-w-[1080px] mx-auto flex flex-col gap-14">
-          {/* Address + window meta */}
+          {/* Address + meta */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6">
             <div className="flex flex-col gap-3 min-w-0">
               <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted flex-wrap">
                 <span aria-hidden className="w-8 h-px bg-rule" />
-                <span>wallet audit</span>
-                <span aria-hidden className="text-muted-2">·</span>
                 <span className="lowercase tracking-normal text-[12px] not-italic">
                   last {windowReadable()}
                 </span>
@@ -192,24 +190,26 @@ export function ScanView({ address }: { address: string }) {
             </div>
           </div>
 
-          {/* Hero score card */}
-          <section className="relative border-t border-b border-ink/80 py-10 md:py-16">
+          {/* Hero — centered meter, copy under */}
+          <section className="relative border-t border-b border-ink/80 py-12 md:py-20">
             <CelebrationBurst trigger={celebrationKey} />
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
-              <div className="md:col-span-6 flex flex-col items-center md:items-start gap-4">
-                <span className="text-[11px] tracking-[0.22em] lowercase text-muted">
-                  privacy score
-                </span>
+            <div className="flex flex-col items-center gap-8 md:gap-10">
+              <span className="text-[11px] tracking-[0.28em] lowercase text-muted">
+                privacy score
+              </span>
+
+              <div className="relative origin-center scale-[0.72] sm:scale-[0.85] md:scale-100">
+                {/* Soft tri-color glow behind the meter so it pops on the page */}
+                <div
+                  aria-hidden
+                  className="meter-bed absolute -inset-12 md:-inset-16 rounded-full pointer-events-none"
+                />
                 <div className="relative">
                   {scan ? (
-                    <CircularScore
-                      value={scan.totalScore}
-                      size={340}
-                      className="md:scale-100"
-                    />
+                    <CircularScore value={scan.totalScore} size={420} />
                   ) : (
                     <div className="pulse-soft">
-                      <CircularScore value={0} size={340} showBand={false} />
+                      <CircularScore value={0} size={420} showBand={false} />
                     </div>
                   )}
                   <AnimatePresence>
@@ -228,7 +228,7 @@ export function ScanView({ address }: { address: string }) {
                             duration: 0.6,
                             ease: [0.16, 1, 0.3, 1],
                           }}
-                          className="absolute -top-1 right-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-full border tabular text-[12px]"
+                          className="absolute -top-2 -right-2 md:right-6 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border tabular text-[12px]"
                           style={{
                             color:
                               totalDelta > 0
@@ -238,7 +238,7 @@ export function ScanView({ address }: { address: string }) {
                               totalDelta > 0
                                 ? "var(--score-high)"
                                 : "var(--score-low)",
-                            background: "rgba(251,248,241,0.92)",
+                            background: "rgba(255,255,255,0.94)",
                             backdropFilter: "blur(2px)",
                           }}
                         >
@@ -261,11 +261,11 @@ export function ScanView({ address }: { address: string }) {
                 </div>
               </div>
 
-              <div className="md:col-span-6 flex flex-col gap-5">
+              <div className="w-full flex justify-center">
                 {phase === "scanning" ? (
                   <ScanTips />
                 ) : (
-                  <p className="font-display text-[22px] md:text-[28px] leading-[1.25] tracking-[-0.015em] text-ink-soft max-w-[34ch]">
+                  <p className="font-display text-[22px] md:text-[30px] leading-[1.2] tracking-[-0.018em] text-ink-soft max-w-[38ch] text-center">
                     {heroCopy(phase, scan, totalDelta)}
                   </p>
                 )}
@@ -434,10 +434,10 @@ function CelebrationBurst({ trigger }: { trigger: number }) {
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
       >
         <div
-          className="w-[420px] h-[420px] rounded-full"
+          className="w-[520px] h-[520px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(79,122,74,0.35) 0%, rgba(79,122,74,0) 60%)",
+              "radial-gradient(circle, rgba(2,201,121,0.38) 0%, rgba(2,201,121,0) 62%)",
           }}
         />
       </motion.div>

@@ -22,7 +22,9 @@ function bandLabel(value: number): string {
 }
 
 function tickColor(percent: number): string {
-  if (percent < 0.35) return "var(--score-low)";
+  // Smoothly transition red → amber → green so the arc reads like a gradient
+  // rather than three discrete bands. Same colours as the score vars.
+  if (percent < 0.4) return "var(--score-low)";
   if (percent < 0.7) return "var(--score-mid)";
   return "var(--score-high)";
 }
@@ -124,7 +126,7 @@ export function CircularScore({
           cx={cx}
           cy={cy}
           r={rInner - 10}
-          fill="#fbf8f1"
+          fill="#ffffff"
           stroke="rgba(20,17,13,0.06)"
           strokeWidth={1}
           filter="url(#cs-soft)"
@@ -203,9 +205,9 @@ function AnimatedTick({
   filledCount: import("motion/react").MotionValue<number>;
 }) {
   const stroke = useTransform(filledCount, (c) =>
-    c > index ? activeColor : "rgba(20,17,13,0.10)"
+    c > index ? activeColor : "rgba(20,17,13,0.08)"
   );
-  const width = useTransform(filledCount, (c) => (c > index ? 2.4 : 1.4));
+  const width = useTransform(filledCount, (c) => (c > index ? 3.2 : 1.6));
   return (
     <motion.line
       x1={x1}

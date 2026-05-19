@@ -6,48 +6,21 @@ import { motion, AnimatePresence } from "motion/react";
 type Tip = {
   eyebrow: string;
   title: string;
-  body: string;
 };
 
+// Short, sharp principles. No body text — the meter is the focus while these
+// tick by.
 const TIPS: Tip[] = [
-  {
-    eyebrow: "tip · one wallet, one job",
-    title: "your wallet tells a story.",
-    body: "a wallet you use for everything tells anyone watching exactly who you are. a wallet you use for one thing tells almost nothing.",
-  },
-  {
-    eyebrow: "tip · revoke quarterly",
-    title: "stale approvals outlive the dapp.",
-    body: "a delegation you granted a year ago to a forgotten app can still move tokens today. revoking costs a fraction of a cent. forgetting can cost the wallet.",
-  },
-  {
-    eyebrow: "tip · the cheapest tracking pixel",
-    title: "ignore the airdrop.",
-    body: "an unsolicited dust token is the cheapest tracking pixel ever invented. selling, swapping, or moving it links the receiving address to whatever you do next.",
-  },
-  {
-    eyebrow: "tip · names are bridges",
-    title: "public address is not public identity.",
-    body: "until you bridge them. sns records, social handles, and labeled accounts are the most common edge between a wallet and a person.",
-  },
-  {
-    eyebrow: "tip · cex distance is legal distance",
-    title: "every hop is a buffer.",
-    body: "a wallet funded straight from your kyc'd exchange sits one subpoena away from your identity. one intermediate wallet you control changes that materially.",
-  },
-  {
-    eyebrow: "tip · don't display the vault",
-    title: "a balance you never show is harder to phish.",
-    body: "keep day to day spend on one address. keep long hold value on a separate cold or vault address you don't connect to random dapps.",
-  },
-  {
-    eyebrow: "tip · maintenance is the lure",
-    title: "phishing dresses up as routine.",
-    body: "“reapprove”, “migrate”, “claim”. the most dangerous prompts wear the costume of housekeeping. read every signature; never sign blind.",
-  },
+  { eyebrow: "one wallet, one job", title: "a wallet you use for everything tells everyone everything." },
+  { eyebrow: "revoke quarterly", title: "stale approvals outlive the dapp." },
+  { eyebrow: "the cheapest tracking pixel", title: "ignore the airdrop. don't touch the dust." },
+  { eyebrow: "names are bridges", title: "your address is public. your identity doesn't have to be." },
+  { eyebrow: "cex distance is legal distance", title: "every hop is a buffer." },
+  { eyebrow: "don't display the vault", title: "a balance you never show is harder to phish." },
+  { eyebrow: "maintenance is the lure", title: "phishing dresses up as routine. read every signature." },
 ];
 
-const ROTATE_MS = 4200;
+const ROTATE_MS = 3400;
 
 export function ScanTips() {
   const [i, setI] = useState(0);
@@ -62,7 +35,7 @@ export function ScanTips() {
   const t = TIPS[i];
 
   return (
-    <div className="card-soft px-6 md:px-8 py-6 md:py-7 flex flex-col gap-4 w-full max-w-[460px]">
+    <div className="card-soft px-6 md:px-8 py-5 md:py-6 flex flex-col gap-4 w-full max-w-[520px]">
       <div className="flex items-center justify-between text-[11px] tracking-[0.22em] lowercase text-muted">
         <span className="flex items-center gap-2">
           <span aria-hidden className="relative inline-flex">
@@ -82,22 +55,19 @@ export function ScanTips() {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col gap-3 min-h-[140px]"
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col gap-2 min-h-[88px]"
         >
           <span className="text-[11px] tracking-[0.22em] lowercase text-accent">
-            {t.eyebrow}
+            tip · {t.eyebrow}
           </span>
-          <h3 className="font-display text-[22px] md:text-[26px] leading-[1.15] tracking-[-0.015em] text-ink">
+          <h3 className="font-display text-[20px] md:text-[22px] leading-[1.18] tracking-[-0.015em] text-ink">
             {t.title}
           </h3>
-          <p className="text-[14px] leading-[1.55] text-ink-soft max-w-[44ch]">
-            {t.body}
-          </p>
         </motion.div>
       </AnimatePresence>
 
-      <div className="flex gap-1.5 pt-1">
+      <div className="flex gap-1.5">
         {TIPS.map((_, idx) => (
           <span
             key={idx}

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useId } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { scoreBand } from "@/lib/scoring";
 import { RUBRIC_BY_FACTOR } from "@/lib/rubrics";
-import type { Factor } from "@/lib/types";
+import type { Factor, FactorKey } from "@/lib/types";
 import { FactorIcon } from "./FactorIcon";
 
 type Band = "high" | "mid" | "low";
@@ -21,10 +20,10 @@ const BAND_COLOR: Record<Band, string> = {
   low: "var(--score-low)",
 };
 
-const BAND_ARROW: Record<Band, string> = {
-  high: "✓",
-  mid: "↓",
-  low: "↓",
+const BAND_SOFT: Record<Band, string> = {
+  high: "var(--score-high-soft)",
+  mid: "var(--score-mid-soft)",
+  low: "var(--score-low-soft)",
 };
 
 export function SubScoreChip({
@@ -34,54 +33,35 @@ export function SubScoreChip({
   factor: Factor;
   previousScore?: number;
 }) {
-  const [open, setOpen] = useState(false);
-  const panelId = useId();
   const rubric = RUBRIC_BY_FACTOR[factor.key];
   const band = scoreBand(factor.score);
   const color = BAND_COLOR[band];
+  const soft = BAND_SOFT[band];
+  const stats = subpointsFor(factor);
 
   return (
-    <div className="card-soft p-5 flex flex-col gap-4 relative">
-      {/* Header row: icon + title + info button */}
-      <div className="flex items-center justify-between gap-3 min-w-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-muted-2 shrink-0">
-            <FactorIcon k={factor.key} size={18} />
-          </span>
-          <span className="text-[13px] text-ink truncate">{factor.title}</span>
-        </div>
-        {rubric && (
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls={panelId}
-            aria-label={open ? "Hide details" : "Show details"}
-            className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full border border-rule text-muted hover:border-ink hover:text-ink transition-colors focus-ring"
-          >
-            <svg
-              aria-hidden
-              width="11"
-              height="11"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            >
-              <circle cx="8" cy="4.5" r="0.6" fill="currentColor" />
-              <path d="M8 7.5v5" />
-            </svg>
-          </button>
-        )}
+    <div className="card-soft is-interactive p-5 flex flex-col gap-4 relative group overflow-hidden">
+      {/* Header row */}
+      <div className="flex items-center gap-2 min-w-0">
+        <span
+          aria-hidden
+          className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full"
+          style={{ background: soft, color }}
+        >
+          <FactorIcon k={factor.key} size={15} />
+        </span>
+        <span className="text-[13px] text-ink truncate">{factor.title}</span>
+        <span className="ml-auto text-[10.5px] tracking-[0.2em] lowercase text-muted-2 tabular">
+          w {factor.weight}
+        </span>
       </div>
 
-      {/* Body: score + vertical gauge */}
-      <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
+      {/* Body: score + band + vertical gauge */}
+      <div className="grid grid-cols-[1fr_auto] gap-4 items-end">
         <div className="flex flex-col gap-2 min-w-0">
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-baseline gap-1.5">
             <span
-              className="score-numeral text-[44px] leading-none tabular"
+              className="score-numeral text-[48px] leading-none tabular"
               style={{ color: "var(--ink)" }}
             >
               {factor.score}
@@ -89,93 +69,167 @@ export function SubScoreChip({
             <span className="text-[13px] text-muted tabular">/ 100</span>
             <DeltaPill previousScore={previousScore} score={factor.score} />
           </div>
-          <div
-            className="inline-flex items-center gap-1.5 text-[13px]"
-            style={{ color }}
+          <span
+            className="inline-flex w-fit items-center gap-1.5 text-[11.5px] tracking-[0.14em] lowercase px-2 py-[3px] rounded-full"
+            style={{
+              color,
+              background: soft,
+              boxShadow: `inset 0 0 0 1px ${color}33`,
+            }}
           >
-            <span
-              aria-hidden
-              className="inline-flex items-center justify-center w-4 h-4 rounded-full"
-              style={{ background: `${color}22` }}
-            >
-              <span className="text-[10px] leading-none">{BAND_ARROW[band]}</span>
-            </span>
-            <span>{BAND_LABEL[band]}</span>
-          </div>
+            <span aria-hidden className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+            {BAND_LABEL[band]}
+          </span>
         </div>
         <VerticalGauge value={factor.score} color={color} />
       </div>
 
-      {/* Expandable info panel (triggered by 'i' button) */}
-      {rubric && (
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.div
-              id={panelId}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden"
+      {/* Stat subpoints — default content, fades out on card hover. */}
+      <ul
+        className="flex flex-col mt-1 transition-opacity duration-200 ease-out group-hover:opacity-0"
+        aria-label="stats"
+      >
+        {stats.map((s, i) => (
+          <li
+            key={i}
+            className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12.5px] border-b border-rule-soft last:border-b-0"
+          >
+            <span className="text-muted leading-snug">{s.label}</span>
+            <span
+              className="tabular text-ink-soft whitespace-nowrap"
+              style={{ color: s.tone === "warn" ? color : undefined }}
             >
-              <div className="pt-4 mt-1 border-t border-rule-soft flex flex-col gap-3">
-                <p className="text-[12.5px] text-ink-soft leading-relaxed max-w-[44ch]">
-                  {rubric.measures}
-                </p>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] tracking-[0.2em] lowercase text-muted">
-                    rubric
+              {s.value}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* Hover overlay — rubric peek. Absolutely placed over the stats so
+          the card height stays stable. */}
+      {rubric && (
+        <div
+          className="pointer-events-none absolute left-5 right-5 bottom-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
+          aria-hidden
+        >
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] tracking-[0.22em] lowercase text-muted">
+              how this is scored
+            </span>
+            <ul className="flex flex-col">
+              {rubric.steps.slice(0, 3).map((s, i) => (
+                <li
+                  key={i}
+                  className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12px] border-b border-rule-soft last:border-b-0"
+                >
+                  <span className="text-ink-soft leading-snug">{s.when}</span>
+                  <span className="tabular text-muted whitespace-nowrap">
+                    {s.effect}
                   </span>
-                  <ul className="flex flex-col">
-                    {rubric.steps.map((s, i) => (
-                      <li
-                        key={i}
-                        className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12px] border-b border-rule-soft last:border-b-0"
-                      >
-                        <span className="text-ink-soft leading-snug">
-                          {s.when}
-                        </span>
-                        <span className="tabular text-muted whitespace-nowrap">
-                          {s.effect}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] tracking-[0.2em] lowercase text-muted">
-                    signals from this scan
-                  </span>
-                  <ul className="flex flex-col">
-                    {Object.entries(factor.signals)
-                      .filter(([k]) => k !== "windowDays")
-                      .map(([k, v]) => (
-                        <li
-                          key={k}
-                          className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12px] border-b border-rule-soft last:border-b-0"
-                        >
-                          <span className="capitalize text-muted">
-                            {humanize(k)}
-                          </span>
-                          <span className="tabular text-ink-soft whitespace-nowrap">
-                            {String(v)}
-                          </span>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-                {rubric.note && (
-                  <p className="text-[11px] text-muted leading-relaxed max-w-[44ch]">
-                    {rubric.note}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
     </div>
   );
+}
+
+type StatPoint = { label: string; value: string; tone?: "warn" };
+
+function subpointsFor(f: Factor): StatPoint[] {
+  switch (f.key) {
+    case "identity": {
+      const names = Number(f.signals.namesOwned ?? 0);
+      const records = Number(f.signals.exposedRecords ?? 0);
+      const match = String(f.signals.nameMatchesHandle ?? "no") === "yes";
+      return [
+        {
+          label: "names owned",
+          value: names.toString(),
+          tone: names > 0 ? "warn" : undefined,
+        },
+        {
+          label: "public records",
+          value: records.toString(),
+          tone: records > 0 ? "warn" : undefined,
+        },
+        {
+          label: "name → social",
+          value: match ? "matched" : "—",
+          tone: match ? "warn" : undefined,
+        },
+      ];
+    }
+    case "kyc": {
+      const dist = String(f.signals.distanceLabel ?? "—");
+      const cex = String(f.signals.nearestCex ?? "—");
+      const hops = String(f.signals.hops ?? "—");
+      const isClose = dist === "direct CEX funding" || dist === "1 hop";
+      return [
+        { label: "cex distance", value: dist, tone: isClose ? "warn" : undefined },
+        { label: "nearest cex", value: cex },
+        { label: "hops detected", value: hops },
+      ];
+    }
+    case "cluster": {
+      const cp = Number(f.signals.uniqueCounterparties ?? 0);
+      const da = Number(f.signals.uniqueDapps ?? 0);
+      const tx = Number(f.signals.txCount ?? 0);
+      return [
+        { label: "counterparties", value: cp.toString(), tone: cp > 30 ? "warn" : undefined },
+        { label: "unique dapps", value: da.toString(), tone: da > 20 ? "warn" : undefined },
+        { label: "transactions · 90d", value: tx.toString() },
+      ];
+    }
+    case "connected": {
+      const active =
+        Number(f.signals.activeDelegations ?? 0) +
+        Number(f.signals.activeStakeAuthorities ?? 0);
+      const stale =
+        Number(f.signals.staleDelegations ?? 0) +
+        Number(f.signals.staleStakeAuthorities ?? 0);
+      const total = Number(f.signals.totalLive ?? active + stale);
+      return [
+        { label: "active permissions", value: active.toString(), tone: active > 0 ? "warn" : undefined },
+        { label: "stale permissions", value: stale.toString(), tone: stale > 0 ? "warn" : undefined },
+        { label: "total live", value: total.toString() },
+      ];
+    }
+    case "wealth": {
+      const total = String(f.signals.usdTotal ?? "—");
+      const sol = String(f.signals.solUsd ?? "—");
+      const spl = String(f.signals.splUsd ?? "—");
+      return [
+        { label: "visible value", value: total },
+        { label: "sol", value: sol },
+        { label: "priced spl", value: spl },
+      ];
+    }
+    case "surveillance": {
+      const outbound = Number(f.signals.outboundFlagged ?? 0);
+      const inbound = Number(f.signals.inboundFlagged ?? 0);
+      const severity = String(f.signals.severity ?? "none");
+      return [
+        {
+          label: "outbound flagged",
+          value: outbound.toString(),
+          tone: outbound > 0 ? "warn" : undefined,
+        },
+        {
+          label: "inbound flagged",
+          value: inbound.toString(),
+          tone: inbound > 0 ? "warn" : undefined,
+        },
+        {
+          label: "severity",
+          value: severity,
+          tone: severity === "material" ? "warn" : undefined,
+        },
+      ];
+    }
+  }
 }
 
 function VerticalGauge({ value, color }: { value: number; color: string }) {
@@ -186,7 +240,7 @@ function VerticalGauge({ value, color }: { value: number; color: string }) {
       className="relative rounded-full overflow-hidden flex items-end"
       style={{
         width: 18,
-        height: 64,
+        height: 80,
         background: "rgba(20,17,13,0.05)",
         boxShadow: "inset 0 0 0 1px rgba(20,17,13,0.05)",
       }}
@@ -207,13 +261,6 @@ function VerticalGauge({ value, color }: { value: number; color: string }) {
       />
     </div>
   );
-}
-
-function humanize(key: string): string {
-  return key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (s) => s.toUpperCase())
-    .trim();
 }
 
 function DeltaPill({
@@ -248,3 +295,6 @@ function DeltaPill({
     </motion.span>
   );
 }
+
+// satisfy FactorKey re-export potential
+export type { FactorKey };
