@@ -46,15 +46,15 @@ function LeakReasonCard({
 
   return (
     <li className="border border-rule bg-paper-2/40 rounded-sm">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 md:p-7">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 p-5 md:p-7">
         {/* Left rail: index + severity */}
         <div className="md:col-span-1 flex md:flex-col items-center md:items-start gap-3">
-          <span className="font-display text-[34px] leading-none text-muted-2 tabular">
+          <span className="font-display text-[28px] md:text-[34px] leading-none text-muted-2 tabular">
             {String(index).padStart(2, "0")}
           </span>
           <span
             aria-hidden
-            className="inline-block w-2 h-2 rounded-full mt-1"
+            className="inline-block w-2 h-2 rounded-full mt-0 md:mt-1"
             style={{ background: sevColor }}
             title={`${reason.severity} severity`}
           />
@@ -62,14 +62,14 @@ function LeakReasonCard({
 
         {/* Main column */}
         <div className="md:col-span-8 flex flex-col gap-3">
-          <div className="flex items-baseline gap-3 text-[11px] tracking-[0.22em] uppercase text-muted">
+          <div className="flex items-baseline gap-2 md:gap-3 text-[11px] tracking-[0.22em] uppercase text-muted flex-wrap">
             <span>{factorLabel(reason.factorKey)}</span>
             <span aria-hidden className="text-muted-2">
               ·
             </span>
             <span>{reason.severity} severity</span>
           </div>
-          <h3 className="font-display text-[22px] md:text-[26px] leading-tight text-ink">
+          <h3 className="font-display text-[20px] md:text-[26px] leading-tight text-ink">
             {reason.title}
           </h3>
           <p className="text-[15px] leading-[1.55] text-ink-soft max-w-[58ch]">
@@ -158,17 +158,17 @@ function LeakReasonCard({
         </div>
 
         {/* Right column: estimated lift */}
-        <div className="md:col-span-3 flex md:flex-col items-start md:items-end justify-between md:justify-start gap-2 md:gap-1 md:border-l md:border-rule-soft md:pl-6">
+        <div className="md:col-span-3 flex md:flex-col items-center md:items-end justify-between md:justify-start gap-3 md:gap-1 pt-3 md:pt-0 border-t border-rule-soft md:border-t-0 md:border-l md:border-rule-soft md:pl-6">
           <span className="text-[11px] tracking-[0.22em] uppercase text-muted">
             Estimated lift
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="font-display text-[44px] md:text-[56px] leading-none text-ink tabular">
+            <span className="font-display text-[36px] md:text-[56px] leading-none text-ink tabular">
               +{reason.estimatedLift}
             </span>
             <span className="text-[14px] text-muted">pts</span>
           </div>
-          <p className="text-[11px] text-muted md:text-right max-w-[20ch]">
+          <p className="text-[11px] text-muted md:text-right max-w-[20ch] hidden sm:block">
             Max headroom if this factor is fully addressed.
           </p>
         </div>

@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { resolveAddressInput } from "@/lib/resolve";
+import { resolveAddressInput, shortAddress } from "@/lib/resolve";
 import { ConnectButton } from "@/components/ConnectButton";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useScanStore } from "@/lib/scan-store";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -14,6 +15,10 @@ export default function LandingPage() {
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Zustand keeps scan state in-memory across client-side navs. Surfacing
+  // the last scan lets the user audit a second wallet and bounce back to
+  // compare without retyping the address.
+  const lastScan = useScanStore((s) => s.current);
 
   function auditConnected() {
     if (!publicKey) return;
@@ -36,14 +41,14 @@ export default function LandingPage() {
 
   return (
     <div className="relative z-10 flex-1 flex flex-col">
-      <header className="flex items-center justify-between px-8 md:px-14 pt-8">
+      <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
         <Link href="/" className="flex items-center gap-2 group">
           <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
             PrivacyScore
           </span>
         </Link>
-        <nav className="text-[13px] text-muted flex items-center gap-6">
+        <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">
           <Link href="/methodology" className="hover:text-ink transition-colors">
             Methodology
           </Link>
@@ -51,7 +56,7 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-6 md:px-14">
+      <main className="flex-1 flex items-center justify-center px-5 md:px-14 py-10 md:py-0">
         <div className="w-full max-w-[860px] -mt-8">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -64,13 +69,13 @@ export default function LandingPage() {
               <span>An audit, not a verdict</span>
             </div>
 
-            <h1 className="font-display text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
+            <h1 className="font-display text-[44px] sm:text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
               See what your wallet
               <br />
               <span className="font-italic-serif text-ink">is quietly showing.</span>
             </h1>
 
-            <p className="max-w-[52ch] text-[17px] md:text-[18px] leading-[1.55] text-ink-soft">
+            <p className="max-w-[52ch] text-[16px] sm:text-[17px] md:text-[18px] leading-[1.55] text-ink-soft">
               Paste any Solana address. We&rsquo;ll spend about thirty seconds reading
               ninety days of public on-chain activity and give you one number
               between 0 and 100. Higher means more private. The math is open.
@@ -94,14 +99,14 @@ export default function LandingPage() {
                   placeholder="paste a solana address, or a .sol name"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="input-bare flex-1 text-[24px] md:text-[28px] text-ink leading-tight"
+                  className="input-bare flex-1 min-w-0 text-[18px] sm:text-[24px] md:text-[28px] text-ink leading-tight"
                   aria-label="Solana address or .sol name"
                   disabled={busy}
                 />
                 <button
                   type="submit"
                   disabled={busy || !value.trim()}
-                  className="font-display text-[20px] md:text-[22px] leading-none text-ink hover:italic transition-[font-style] disabled:opacity-40 focus-ring"
+                  className="font-display text-[18px] sm:text-[20px] md:text-[22px] leading-none text-ink hover:italic transition-[font-style] disabled:opacity-40 focus-ring whitespace-nowrap"
                 >
                   {busy ? "resolving…" : "audit →"}
                 </button>
@@ -124,6 +129,23 @@ export default function LandingPage() {
                 )}
               </div>
             </form>
+
+            {lastScan && (
+              <div className="flex items-center gap-3 flex-wrap text-[13px] -mt-3">
+                <span className="text-muted">Last scan this session</span>
+                <Link
+                  href={`/w/${lastScan.address}`}
+                  className="inline-flex items-center gap-2 border border-rule hover:border-ink px-3 py-1.5 rounded-full text-ink-soft hover:text-ink transition-colors focus-ring"
+                >
+                  <span className="font-mono text-[12px]">
+                    {shortAddress(lastScan.address, 4, 4)}
+                  </span>
+                  <span aria-hidden className="text-muted-2">·</span>
+                  <span className="tabular">{lastScan.totalScore}/100</span>
+                  <span aria-hidden>↗</span>
+                </Link>
+              </div>
+            )}
           </motion.div>
         </div>
       </main>

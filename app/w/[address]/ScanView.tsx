@@ -83,6 +83,11 @@ export function ScanView({ address }: { address: string }) {
   }
 
   const isOwned = publicKey?.toBase58() === address;
+  // Watch-only = scanning an address that isn't the connected wallet (or
+  // no wallet connected at all). Drives a muted pill on the scan view and
+  // a watermark on the share card so screenshots can't masquerade as the
+  // owner's self-attestation.
+  const watchOnly = !isOwned;
 
   // Only count scans whose address matches the current URL — guards against
   // stale store entries when the user switches wallets.
@@ -145,36 +150,36 @@ export function ScanView({ address }: { address: string }) {
 
   return (
     <div className="relative z-10 flex-1 flex flex-col">
-      <header className="flex items-center justify-between px-8 md:px-14 pt-8">
+      <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
         <Link href="/" className="flex items-center gap-2 group">
           <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
             PrivacyScore
           </span>
         </Link>
-        <nav className="text-[13px] text-muted flex items-center gap-6">
+        <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">
           <Link href="/" className="hover:text-ink transition-colors">
             Scan another
           </Link>
-          <Link href="/methodology" className="hover:text-ink transition-colors">
+          <Link href="/methodology" className="hover:text-ink transition-colors hidden sm:inline">
             Methodology
           </Link>
           <ConnectButton />
         </nav>
       </header>
 
-      <main className="flex-1 px-6 md:px-14 py-14">
+      <main className="flex-1 px-5 md:px-14 py-10 md:py-14">
         <div className="w-full max-w-[1080px] mx-auto flex flex-col gap-14">
           {/* Address + window meta */}
           <div className="flex flex-col gap-3">
-            <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
+            <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted flex-wrap">
               <span aria-hidden className="w-8 h-px bg-rule" />
               <span>90-day audit</span>
               <span aria-hidden className="text-muted-2">·</span>
               <span className="lowercase tracking-normal text-[12px] not-italic">
                 last {windowReadable()}
               </span>
-              {isOwned && (
+              {isOwned ? (
                 <>
                   <span aria-hidden className="text-muted-2">·</span>
                   <span className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-[color:var(--score-high)]">
@@ -182,22 +187,33 @@ export function ScanView({ address }: { address: string }) {
                     owned by you
                   </span>
                 </>
+              ) : (
+                <>
+                  <span aria-hidden className="text-muted-2">·</span>
+                  <span
+                    className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
+                    title="You're auditing an address that isn't the connected wallet. Share cards from watch-only scans are watermarked."
+                  >
+                    <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
+                    watch-only
+                  </span>
+                </>
               )}
             </div>
-            <h2 className="font-display text-[34px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink">
+            <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
               <span className="font-italic-serif text-muted">audit · </span>
-              <span className="font-mono text-[22px] md:text-[28px] tracking-tight align-baseline text-ink">
+              <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
                 {shortAddress(address, 6, 6)}
               </span>
             </h2>
           </div>
 
           {/* Hero score card */}
-          <section className="relative border-t border-b border-ink/80 py-12 md:py-16">
+          <section className="relative border-t border-b border-ink/80 py-10 md:py-16">
             <CelebrationBurst trigger={celebrationKey} />
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
               <div className="md:col-span-7 flex items-start gap-5">
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full">
                   <span className="text-[11px] tracking-[0.22em] uppercase text-muted mb-3">
                     Privacy Score
                   </span>
@@ -205,21 +221,21 @@ export function ScanView({ address }: { address: string }) {
                     {scan ? (
                       <ScoreNumeral
                         value={scan.totalScore}
-                        className="text-[180px] md:text-[260px]"
+                        className="text-[128px] sm:text-[180px] md:text-[260px]"
                       />
                     ) : phase === "error" ? (
-                      <span className="score-numeral text-[120px] md:text-[180px] text-muted-2">
+                      <span className="score-numeral text-[96px] sm:text-[120px] md:text-[180px] text-muted-2">
                         ——
                       </span>
                     ) : (
                       <motion.span
                         key="loading-num"
-                        className="score-numeral text-[180px] md:text-[260px] text-muted-2 pulse-soft"
+                        className="score-numeral text-[128px] sm:text-[180px] md:text-[260px] text-muted-2 pulse-soft"
                       >
                         ··
                       </motion.span>
                     )}
-                    <span className="text-[18px] md:text-[22px] text-muted tabular pb-6 md:pb-10">
+                    <span className="text-[16px] sm:text-[18px] md:text-[22px] text-muted tabular pb-4 sm:pb-6 md:pb-10">
                       / 100
                     </span>
                     <AnimatePresence>
@@ -311,7 +327,7 @@ export function ScanView({ address }: { address: string }) {
           {scan && <DustPanel warnings={scan.dustWarnings} />}
 
           {/* Sub-scores */}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
             {(["identity", "kyc", "cluster", "connected", "wealth", "surveillance"] as const).map(
               (k) => {
                 const f = factorByKey.get(k);
@@ -353,7 +369,7 @@ export function ScanView({ address }: { address: string }) {
               address={address}
               score={scan.totalScore}
               previousScore={prevForThis ? prevForThis.totalScore : null}
-              watchOnly={false}
+              watchOnly={watchOnly}
             />
           )}
 

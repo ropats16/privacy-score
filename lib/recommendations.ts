@@ -1,7 +1,19 @@
 // Curated external tool/guide links per leak reason.
-// v1: hand-picked links, `affiliate` slot empty.
-// v1.5+: referral slots can be populated without touching consumers.
-// Phase 7 expands this; Phase 2 seeds it for the two live factors.
+//
+// Curation policy (audited in Phase 7):
+//   • Every factor key must have ≥1 entry.
+//   • Links go to official docs, established privacy explainers, or
+//     well-known utilities (Bonfida SNS, Revoke.cash, Sol-Incinerator,
+//     Phantom help, OFAC official source).
+//   • NO mixers, tumblers, or anything that could be construed as
+//     sanctions-evasion guidance — even if some users might want it.
+//     Surveillance recommendations point at official lookup tools, not
+//     at evasion.
+//   • `affiliate` is reserved for future referral monetization. Empty
+//     in v1 across every link.
+//
+// Methodology page reads this same file, so additions show up in the
+// public surface automatically.
 
 import type { FactorKey, ToolLink } from "./types";
 
@@ -56,7 +68,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
     },
     {
       label: "Solana stake authority docs",
-      url: "https://docs.solanalabs.com/cli/wallets/file-system-wallet#changing-the-authorities-of-a-stake-account",
+      url: "https://solana.com/docs/economics/staking",
       blurb:
         "Reference for moving stake / withdrawer authorities back to addresses you control.",
     },

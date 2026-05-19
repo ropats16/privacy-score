@@ -70,7 +70,7 @@ export function ShareActions({
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start min-w-0">
         {/* Preview */}
         <div className="md:col-span-7">
           <div className="relative border border-rule bg-paper-2/40 rounded-sm overflow-hidden">
