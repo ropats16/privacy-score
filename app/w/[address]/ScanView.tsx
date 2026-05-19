@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useWallet } from "@solana/wallet-adapter-react";
 import {
   deriveDust,
   deriveSurveillance,
@@ -33,7 +32,6 @@ import { SubScoreChip } from "@/components/SubScoreChip";
 import { FactorProgressList } from "@/components/FactorProgressList";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
 import { DustPanel } from "@/components/DustPanel";
-import { ConnectButton } from "@/components/ConnectButton";
 import { ShareActions } from "@/components/ShareActions";
 import type {
   DustWarning,
@@ -59,7 +57,6 @@ const MISSING_KEY_MSG =
 
 export function ScanView({ address }: { address: string }) {
   const hasKey = HELIUS_KEY.length > 0;
-  const { publicKey } = useWallet();
   const [progress, setProgress] = useState<FactorProgress[]>(INITIAL_PROGRESS);
   const [phase, setPhase] = useState<Phase>(hasKey ? "scanning" : "error");
   const [error, setError] = useState<string | null>(
@@ -82,12 +79,9 @@ export function ScanView({ address }: { address: string }) {
     setError(hasKey ? null : MISSING_KEY_MSG);
   }
 
-  const isOwned = publicKey?.toBase58() === address;
-  // Watch-only = scanning an address that isn't the connected wallet (or
-  // no wallet connected at all). Drives a muted pill on the scan view and
-  // a watermark on the share card so screenshots can't masquerade as the
-  // owner's self-attestation.
-  const watchOnly = !isOwned;
+  // No wallet connection in this build — every scan is watch-only. Drives a
+  // muted pill on the scan view and a watermark on the share card.
+  const watchOnly = true;
 
   // Only count scans whose address matches the current URL — guards against
   // stale store entries when the user switches wallets.
@@ -161,10 +155,6 @@ export function ScanView({ address }: { address: string }) {
           <Link href="/" className="hover:text-ink transition-colors">
             Scan another
           </Link>
-          <Link href="/methodology" className="hover:text-ink transition-colors hidden sm:inline">
-            Methodology
-          </Link>
-          <ConnectButton />
         </nav>
       </header>
 
@@ -179,26 +169,14 @@ export function ScanView({ address }: { address: string }) {
               <span className="lowercase tracking-normal text-[12px] not-italic">
                 last {windowReadable()}
               </span>
-              {isOwned ? (
-                <>
-                  <span aria-hidden className="text-muted-2">·</span>
-                  <span className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-[color:var(--score-high)]">
-                    <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[color:var(--score-high)]" />
-                    owned by you
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span aria-hidden className="text-muted-2">·</span>
-                  <span
-                    className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
-                    title="You're auditing an address that isn't the connected wallet. Share cards from watch-only scans are watermarked."
-                  >
-                    <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
-                    watch-only
-                  </span>
-                </>
-              )}
+              <span aria-hidden className="text-muted-2">·</span>
+              <span
+                className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
+                title="Read-only audit. Share cards are watermarked."
+              >
+                <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
+                watch-only
+              </span>
             </div>
             <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
               <span className="font-italic-serif text-muted">audit · </span>
@@ -403,11 +381,6 @@ export function ScanView({ address }: { address: string }) {
           <div>
             <span className="italic">Privacy ≠ anonymity.</span>{" "}
             We don&rsquo;t hide you. We show you what&rsquo;s already public.
-          </div>
-          <div className="flex gap-6">
-            <Link href="/methodology" className="hover:text-ink transition-colors">
-              How the score is built
-            </Link>
           </div>
         </div>
       </footer>

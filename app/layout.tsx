@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import "@solana/wallet-adapter-react-ui/styles.css";
-import { WalletProviders } from "@/components/WalletProviders";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -42,7 +40,7 @@ export default function RootLayout({
         className="min-h-full flex flex-col grain relative"
         suppressHydrationWarning
       >
-        <WalletProviders>{children}</WalletProviders>
+        {children}
       </body>
     </html>
   );

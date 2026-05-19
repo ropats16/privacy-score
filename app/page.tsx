@@ -5,13 +5,10 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { resolveAddressInput, shortAddress } from "@/lib/resolve";
-import { ConnectButton } from "@/components/ConnectButton";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useScanStore } from "@/lib/scan-store";
 
 export default function LandingPage() {
   const router = useRouter();
-  const { publicKey } = useWallet();
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -19,11 +16,6 @@ export default function LandingPage() {
   // the last scan lets the user audit a second wallet and bounce back to
   // compare without retyping the address.
   const lastScan = useScanStore((s) => s.current);
-
-  function auditConnected() {
-    if (!publicKey) return;
-    router.push(`/w/${publicKey.toBase58()}`);
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -48,12 +40,6 @@ export default function LandingPage() {
             PrivacyScore
           </span>
         </Link>
-        <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">
-          <Link href="/methodology" className="hover:text-ink transition-colors">
-            Methodology
-          </Link>
-          <ConnectButton />
-        </nav>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-5 md:px-14 py-10 md:py-0">
@@ -114,20 +100,9 @@ export default function LandingPage() {
               {error && (
                 <p className="text-[14px] text-[color:var(--score-low)]">{error}</p>
               )}
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <p className="text-[13px] text-muted">
-                  Read-only. No wallet connection. Nothing is stored.
-                </p>
-                {publicKey && (
-                  <button
-                    type="button"
-                    onClick={auditConnected}
-                    className="text-[13px] text-ink-soft hover:text-ink transition-colors underline decoration-rule decoration-1 underline-offset-[5px] focus-ring"
-                  >
-                    audit my connected wallet →
-                  </button>
-                )}
-              </div>
+              <p className="text-[13px] text-muted">
+                Read-only. No wallet connection. Nothing is stored.
+              </p>
             </form>
 
             {lastScan && (
@@ -157,11 +132,6 @@ export default function LandingPage() {
             <span>
               We don&rsquo;t hide you. We show you what&rsquo;s already public.
             </span>
-          </div>
-          <div className="flex gap-6">
-            <Link href="/methodology" className="hover:text-ink transition-colors">
-              How the score is built
-            </Link>
           </div>
         </div>
       </footer>
