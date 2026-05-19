@@ -30,7 +30,7 @@ import { useScanStore } from "@/lib/scan-store";
 import { CircularScore } from "@/components/CircularScore";
 import { SubScoreChip } from "@/components/SubScoreChip";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
-import { DustPanel } from "@/components/DustPanel";
+// import { DustPanel } from "@/components/DustPanel";
 // import { ShareActions } from "@/components/ShareActions";
 import { ScanTips } from "@/components/ScanTips";
 import type {
@@ -311,7 +311,7 @@ export function ScanView({ address }: { address: string }) {
           )}
 
           {/* Dust / poisoning panel · informational, never scored */}
-          {scan && <DustPanel warnings={scan.dustWarnings} />}
+          {/* {scan && <DustPanel warnings={scan.dustWarnings} />} */}
 
           {/* Share card + actions — disabled while we rework the share flow */}
           {/* {scan && phase === "done" && (

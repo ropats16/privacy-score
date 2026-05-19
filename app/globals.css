@@ -21,6 +21,11 @@
   --score-mid-soft: rgba(255, 205, 108, 0.18);
   --score-high-soft: rgba(2, 201, 121, 0.12);
 
+  /* Signature blue — landing wordmark underline, methodology rule titles,
+     fixes-card highlight. */
+  --brand: #008cff;
+  --brand-soft: rgba(0, 140, 255, 0.10);
+
   --accent: #ff3e00;
 }
 

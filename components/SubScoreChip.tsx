@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import { scoreBand } from "@/lib/scoring";
-import { RUBRIC_BY_FACTOR } from "@/lib/rubrics";
 import type { Factor, FactorKey } from "@/lib/types";
 import { FactorIcon } from "./FactorIcon";
+import { FactorModal } from "./FactorModal";
 
 type Band = "high" | "mid" | "low";
 
@@ -33,106 +34,99 @@ export function SubScoreChip({
   factor: Factor;
   previousScore?: number;
 }) {
-  const rubric = RUBRIC_BY_FACTOR[factor.key];
+  const [open, setOpen] = useState(false);
   const band = scoreBand(factor.score);
   const color = BAND_COLOR[band];
   const soft = BAND_SOFT[band];
   const stats = subpointsFor(factor);
 
   return (
-    <div className="card-soft is-interactive p-5 flex flex-col gap-4 relative group overflow-hidden">
-      {/* Header row */}
-      <div className="flex items-center gap-2 min-w-0">
-        <span
-          aria-hidden
-          className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full"
-          style={{ background: soft, color }}
-        >
-          <FactorIcon k={factor.key} size={15} />
-        </span>
-        <span className="text-[13px] text-ink truncate">{factor.title}</span>
-        <span className="ml-auto text-[10.5px] tracking-[0.2em] lowercase text-muted-2 tabular">
-          w {factor.weight}
-        </span>
-      </div>
-
-      {/* Body: score + band + vertical gauge */}
-      <div className="grid grid-cols-[1fr_auto] gap-4 items-end">
-        <div className="flex flex-col gap-2 min-w-0">
-          <div className="flex items-baseline gap-1.5">
-            <span
-              className="score-numeral text-[48px] leading-none tabular"
-              style={{ color: "var(--ink)" }}
-            >
-              {factor.score}
-            </span>
-            <span className="text-[13px] text-muted tabular">/ 100</span>
-            <DeltaPill previousScore={previousScore} score={factor.score} />
-          </div>
+    <>
+      <div className="card-soft is-interactive p-5 flex flex-col gap-4 relative overflow-hidden">
+        {/* Header row */}
+        <div className="flex items-center gap-2 min-w-0">
           <span
-            className="inline-flex w-fit items-center gap-1.5 text-[11.5px] tracking-[0.14em] lowercase px-2 py-[3px] rounded-full"
-            style={{
-              color,
-              background: soft,
-              boxShadow: `inset 0 0 0 1px ${color}33`,
-            }}
+            aria-hidden
+            className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full"
+            style={{ background: soft, color }}
           >
-            <span aria-hidden className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-            {BAND_LABEL[band]}
+            <FactorIcon k={factor.key} size={15} />
+          </span>
+          <span className="text-[13px] text-ink truncate">{factor.title}</span>
+          <span className="ml-auto inline-flex items-center gap-2 text-[10.5px] tracking-[0.2em] lowercase text-muted-2 tabular">
+            <span>w {factor.weight}</span>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label={`Details for ${factor.title}`}
+              className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-rule text-muted hover:border-ink hover:text-ink transition-colors focus-ring"
+            >
+              <svg
+                aria-hidden
+                width="11"
+                height="11"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <circle cx="8" cy="4.5" r="0.6" fill="currentColor" />
+                <path d="M8 7.5v5" />
+              </svg>
+            </button>
           </span>
         </div>
-        <VerticalGauge value={factor.score} color={color} />
+
+        {/* Body: score + band + vertical gauge */}
+        <div className="grid grid-cols-[1fr_auto] gap-4 items-end">
+          <div className="flex flex-col gap-2 min-w-0">
+            <div className="flex items-baseline gap-1.5">
+              <span
+                className="score-numeral text-[48px] leading-none tabular"
+                style={{ color: "var(--ink)" }}
+              >
+                {factor.score}
+              </span>
+              <span className="text-[13px] text-muted tabular">/ 100</span>
+              <DeltaPill previousScore={previousScore} score={factor.score} />
+            </div>
+            <span
+              className="inline-flex w-fit items-center gap-1.5 text-[11.5px] tracking-[0.14em] lowercase px-2 py-[3px] rounded-full"
+              style={{
+                color,
+                background: soft,
+                boxShadow: `inset 0 0 0 1px ${color}33`,
+              }}
+            >
+              <span aria-hidden className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+              {BAND_LABEL[band]}
+            </span>
+          </div>
+          <VerticalGauge value={factor.score} color={color} />
+        </div>
+
+        {/* Stat subpoints */}
+        <ul className="flex flex-col mt-1" aria-label="stats">
+          {stats.map((s, i) => (
+            <li
+              key={i}
+              className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12.5px] border-b border-rule-soft last:border-b-0"
+            >
+              <span className="text-muted leading-snug">{s.label}</span>
+              <span
+                className="tabular text-ink-soft whitespace-nowrap"
+                style={{ color: s.tone === "warn" ? color : undefined }}
+              >
+                {s.value}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* Stat subpoints — default content, fades out on card hover. */}
-      <ul
-        className="flex flex-col mt-1 transition-opacity duration-200 ease-out group-hover:opacity-0"
-        aria-label="stats"
-      >
-        {stats.map((s, i) => (
-          <li
-            key={i}
-            className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12.5px] border-b border-rule-soft last:border-b-0"
-          >
-            <span className="text-muted leading-snug">{s.label}</span>
-            <span
-              className="tabular text-ink-soft whitespace-nowrap"
-              style={{ color: s.tone === "warn" ? color : undefined }}
-            >
-              {s.value}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      {/* Hover overlay — rubric peek. Absolutely placed over the stats so
-          the card height stays stable. */}
-      {rubric && (
-        <div
-          className="pointer-events-none absolute left-5 right-5 bottom-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
-          aria-hidden
-        >
-          <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] tracking-[0.22em] lowercase text-muted">
-              how this is scored
-            </span>
-            <ul className="flex flex-col">
-              {rubric.steps.slice(0, 3).map((s, i) => (
-                <li
-                  key={i}
-                  className="grid grid-cols-[1fr_max-content] gap-3 py-1.5 text-[12px] border-b border-rule-soft last:border-b-0"
-                >
-                  <span className="text-ink-soft leading-snug">{s.when}</span>
-                  <span className="tabular text-muted whitespace-nowrap">
-                    {s.effect}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
+      <FactorModal factor={open ? factor : null} onClose={() => setOpen(false)} />
+    </>
   );
 }
 
@@ -296,5 +290,4 @@ function DeltaPill({
   );
 }
 
-// satisfy FactorKey re-export potential
 export type { FactorKey };

@@ -7,17 +7,14 @@ import { RuleIcon } from "./RuleIcon";
 
 type Severity = LeakReason["severity"];
 
-const SEV_COLOR: Record<Severity, string> = {
-  high: "var(--score-low)",
-  medium: "var(--score-mid)",
-  low: "var(--score-high)",
-};
-
 const SEV_LABEL: Record<Severity, string> = {
   high: "exposed",
   medium: "moderate",
   low: "minor",
 };
+
+const BRAND = "var(--brand)";
+const BRAND_SOFT = "var(--brand-soft)";
 
 export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
   if (reasons.length === 0) {
@@ -45,16 +42,15 @@ export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
 
 function LeakReasonCard({ index, reason }: { index: number; reason: LeakReason }) {
   const sev = reason.severity;
-  const sevColor = SEV_COLOR[sev];
   const primaryLink = reason.recommendation.links[0];
 
   return (
     <li className="card-soft is-interactive relative overflow-hidden">
-      {/* Left severity strip */}
+      {/* Left brand strip */}
       <span
         aria-hidden
         className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: sevColor }}
+        style={{ background: BRAND }}
       />
 
       {/* TOP ROW — title, plain-english body, severity & lift */}
@@ -65,13 +61,13 @@ function LeakReasonCard({ index, reason }: { index: number; reason: LeakReason }
               {String(index).padStart(2, "0")}
             </span>
             <span aria-hidden className="text-muted-2">·</span>
-            <span style={{ color: sevColor }}>{SEV_LABEL[sev]}</span>
+            <span style={{ color: BRAND }}>{SEV_LABEL[sev]}</span>
           </div>
           <LiftBadge value={reason.estimatedLift} />
         </div>
 
         <div className="flex items-start gap-3">
-          <span className="text-muted-2 mt-1 shrink-0">
+          <span style={{ color: BRAND }} className="mt-1 shrink-0">
             <FactorIcon k={reason.factorKey} size={20} />
           </span>
           <div className="flex flex-col gap-2 min-w-0">
@@ -150,14 +146,13 @@ function LeakReasonCard({ index, reason }: { index: number; reason: LeakReason }
 
 function LiftBadge({ value }: { value: number }) {
   const positive = value > 0;
-  const color = positive ? "var(--score-high)" : "var(--muted-2)";
   return (
     <span
       className="inline-flex items-center gap-1 tabular px-2.5 py-1 rounded-full text-[12px] font-medium"
       style={{
-        color,
-        background: positive ? "var(--score-high-soft)" : "rgba(20,17,13,0.04)",
-        boxShadow: positive ? "inset 0 0 0 1px rgba(2,201,121,0.30)" : "none",
+        color: positive ? BRAND : "var(--muted-2)",
+        background: positive ? BRAND_SOFT : "rgba(20,17,13,0.04)",
+        boxShadow: positive ? "inset 0 0 0 1px rgba(0,140,255,0.30)" : "none",
       }}
       title="estimated lift to total score"
     >
