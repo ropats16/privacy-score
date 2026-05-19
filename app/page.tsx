@@ -27,7 +27,7 @@ export default function LandingPage() {
       const addr = await resolveAddressInput(value);
       router.push(`/w/${addr}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : "something went wrong.");
       setBusy(false);
     }
   }
@@ -35,13 +35,9 @@ export default function LandingPage() {
   return (
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span
-            aria-hidden
-            className="inline-block w-2.5 h-2.5 rounded-full bg-ink"
-          />
-          <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
-            sneakpeek
+        <Link href="/" className="group">
+          <span className="font-display text-[20px] md:text-[22px] font-semibold text-ink">
+            sneak peek 👀
           </span>
         </Link>
       </header>
@@ -64,7 +60,11 @@ export default function LandingPage() {
             className="flex flex-col gap-10"
           >
             <h1 className="font-display text-[44px] sm:text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
-              A privacy checkup
+              a{" "}
+              <span className="underline decoration-wavy decoration-[#008cff] decoration-[6px] underline-offset-[0.2em]">
+                privacy
+              </span>{" "}
+              checkup
               <br />
               <span className="font-italic-serif text-ink">
                 for your wallet.
@@ -72,13 +72,13 @@ export default function LandingPage() {
             </h1>
 
             <p className="font-sans text-[15px] sm:text-[16px] leading-[1.6] text-muted max-w-[640px] -mt-4">
-              We&rsquo;ll spend about thirty seconds reading 3 months of public
+              we&rsquo;ll spend about thirty seconds reading 3 months of public
               onchain activity and give you a privacy score between 0 and 100.
-              Higher means more private. Learn privacy by doing.
+              higher means more private. learn privacy by doing.
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <div className="flex items-end gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">
+              <div className="flex items-center gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">
                 <input
                   autoFocus
                   spellCheck={false}
@@ -90,15 +90,15 @@ export default function LandingPage() {
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
                   className="input-bare flex-1 min-w-0 text-[18px] sm:text-[24px] md:text-[28px] text-ink leading-tight"
-                  aria-label="Solana address or .sol name"
+                  aria-label="solana address or .sol name"
                   disabled={busy}
                 />
                 <button
                   type="submit"
                   disabled={busy || !value.trim()}
-                  className="font-display text-[18px] sm:text-[20px] md:text-[22px] leading-none text-ink hover:italic transition-[font-style] disabled:opacity-40 focus-ring whitespace-nowrap"
+                  className="font-sans text-[14px] sm:text-[15px] md:text-[16px] leading-none text-paper bg-ink hover:bg-ink-soft rounded-full px-5 py-3 md:px-6 md:py-3.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-ring whitespace-nowrap"
                 >
-                  {busy ? "resolving…" : "check score →"}
+                  {busy ? "resolving…" : "check score"}
                 </button>
               </div>
               {error && (
@@ -110,7 +110,7 @@ export default function LandingPage() {
 
             {lastScan && (
               <div className="flex items-center gap-3 flex-wrap text-[13px] -mt-3">
-                <span className="text-muted">Last scan this session</span>
+                <span className="text-muted">last scan this session</span>
                 <Link
                   href={`/w/${lastScan.address}`}
                   className="inline-flex items-center gap-2 border border-rule hover:border-ink px-3 py-1.5 rounded-full text-ink-soft hover:text-ink transition-colors focus-ring"
@@ -131,16 +131,13 @@ export default function LandingPage() {
       </main>
 
       <footer className="px-8 md:px-14 pb-8 pt-16">
-        <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
-          <div>© Sneakpeek 2026</div>
-          <div className="flex gap-6">
-            <Link
-              href="/methodology"
-              className="hover:text-ink transition-colors font-semibold"
-            >
-              How the score is built
-            </Link>
-          </div>
+        <div className="flex justify-end text-[12px]">
+          <Link
+            href="/methodology"
+            className="inline-flex items-center border border-rule hover:border-ink text-muted hover:text-ink rounded-full px-4 py-2 transition-colors focus-ring"
+          >
+            how the score is built
+          </Link>
         </div>
       </footer>
     </div>

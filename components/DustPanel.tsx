@@ -24,27 +24,27 @@ export function DustPanel({ warnings }: { warnings: DustWarning[] }) {
           </span>
         </div>
         <div className="md:col-span-11 flex flex-col gap-3">
-          <div className="flex items-baseline gap-3 text-[11px] tracking-[0.22em] uppercase text-[color:var(--score-low)]">
-            <span>Do not interact</span>
+          <div className="flex items-baseline gap-3 text-[11px] tracking-[0.22em] lowercase text-[color:var(--score-low)]">
+            <span>do not interact</span>
             <span aria-hidden className="text-[color:var(--score-low)]/50">·</span>
             <span>{warnings.length} flagged</span>
           </div>
           <h3 className="font-display text-[22px] md:text-[26px] leading-tight text-ink">
-            Dust drops & address poisoning attempts.
+            dust drops & address poisoning attempts.
           </h3>
           <p className="text-[14px] leading-[1.55] text-ink-soft max-w-[64ch]">
             These addresses appear in your 90 day history because{" "}
             <em className="font-italic-serif">they</em> sent to{" "}
             <em className="font-italic-serif">you</em>, not the other way
-            around. They&rsquo;re spam designed to lure a return transaction or
-            trick you into copy pasting a lookalike address. They don&rsquo;t
-            affect your score. Do not interact.
+            around. they&rsquo;re spam designed to lure a return transaction or
+            trick you into copy pasting a lookalike address. they don&rsquo;t
+            affect your score. do not interact.
           </p>
 
           {poisoning.length > 0 && (
             <div className="flex flex-col gap-2 mt-2">
-              <div className="text-[11px] tracking-[0.22em] uppercase text-muted">
-                Address poisoning lookalikes
+              <div className="text-[11px] tracking-[0.22em] lowercase text-muted">
+                address poisoning lookalikes
               </div>
               <ul className="flex flex-col gap-1">
                 {poisoning.map((w) => (
@@ -66,8 +66,8 @@ export function DustPanel({ warnings }: { warnings: DustWarning[] }) {
 
           {dust.length > 0 && (
             <div className="flex flex-col gap-2 mt-2">
-              <div className="text-[11px] tracking-[0.22em] uppercase text-muted">
-                Dust drops
+              <div className="text-[11px] tracking-[0.22em] lowercase text-muted">
+                dust drops
               </div>
               <ul className="flex flex-col gap-1">
                 {dust.slice(0, 10).map((w) => (

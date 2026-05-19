@@ -46,6 +46,19 @@ body {
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  text-transform: lowercase;
+}
+
+/* Preserve case for content where letter case is meaningful */
+.font-mono,
+.tabular,
+code,
+kbd,
+samp,
+pre,
+input,
+textarea {
+  text-transform: none;
 }
 
 /* Paper grain — subtle, editorial */

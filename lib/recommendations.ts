@@ -15,7 +15,7 @@ import type { FactorKey, ToolLink } from "./types";
 export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   identity: [
     {
-      label: "Umbra · private payments on Solana",
+      label: "umbra · private payments on solana",
       url: "https://umbraprivacy.com/",
       blurb:
         "Route sensitive activity through Umbra so your named wallet stops being the address that touches everything.",
@@ -23,7 +23,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   ],
   kyc: [
     {
-      label: "Umbra · private payments on Solana",
+      label: "umbra · private payments on solana",
       url: "https://umbraprivacy.com/",
       blurb:
         "Umbra breaks the straight line from a KYC'd CEX deposit to the wallet you actually use.",
@@ -31,7 +31,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   ],
   cluster: [
     {
-      label: "MagicBlock · ephemeral wallets and rollups",
+      label: "magicblock · ephemeral wallets and rollups",
       url: "https://www.magicblock.xyz/",
       blurb:
         "Push high frequency activity (trading, NFTs, app interactions) onto MagicBlock so it doesn't pile up against one address.",
@@ -39,7 +39,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   ],
   connected: [
     {
-      label: "Revoke.cash for Solana",
+      label: "revoke.cash for solana",
       url: "https://revoke.cash/solana",
       blurb:
         "Enumerate every live SPL token delegation on this wallet and revoke the ones you no longer use.",
@@ -47,7 +47,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   ],
   wealth: [
     {
-      label: "Umbra · private payments on Solana",
+      label: "umbra · private payments on solana",
       url: "https://umbraprivacy.com/",
       blurb:
         "Move long hold value off this address with Umbra so your visible balance stops advertising you as a target.",
@@ -55,7 +55,7 @@ export const RECOMMENDATIONS: Record<FactorKey, ToolLink[]> = {
   ],
   surveillance: [
     {
-      label: "OFAC SDN list (official source)",
+      label: "ofac sdn list (official source)",
       url: "https://sanctionssearch.ofac.treas.gov/",
       blurb:
         "Verify whether the address you saw is actually flagged before taking any action.",

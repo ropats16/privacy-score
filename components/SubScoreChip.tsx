@@ -27,7 +27,7 @@ export function SubScoreChip({
   return (
     <div className="flex flex-col gap-3 p-5 border border-rule bg-paper-2/40 rounded-sm min-w-0">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] tracking-[0.2em] uppercase text-muted">
+        <span className="text-[11px] tracking-[0.2em] lowercase text-muted">
           {factor.title}
         </span>
         <span
@@ -64,7 +64,7 @@ export function SubScoreChip({
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls={panelId}
-            className="w-full flex items-center justify-between gap-2 text-[11px] tracking-[0.18em] uppercase text-muted hover:text-ink transition-colors focus-ring rounded-sm"
+            className="w-full flex items-center justify-between gap-2 text-[11px] tracking-[0.18em] lowercase text-muted hover:text-ink transition-colors focus-ring rounded-sm"
           >
             <span>{open ? "Hide rubric" : "Show rubric"}</span>
             <span

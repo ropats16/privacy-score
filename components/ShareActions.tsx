@@ -62,9 +62,9 @@ export function ShareActions({
   return (
     <section className="flex flex-col gap-5">
       <div className="flex items-baseline justify-between gap-4">
-        <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
+        <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted">
           <span aria-hidden className="w-8 h-px bg-rule" />
-          <span>Share</span>
+          <span>share</span>
         </div>
         <span className="text-[12px] text-muted-2">
           rendered on demand · nothing stored
@@ -77,15 +77,15 @@ export function ShareActions({
           <SharePreview
             key={ogPath}
             ogPath={ogPath}
-            alt={`Privacy Score share card for ${shortFile(address)}, ${score} / 100`}
+            alt={`privacy score share card for ${shortFile(address)}, ${score} / 100`}
           />
         </div>
 
         {/* Actions */}
         <div className="md:col-span-5 flex flex-col gap-4">
           <p className="font-italic-serif text-[20px] leading-snug text-ink-soft max-w-[36ch]">
-            Save the card, or post it on X with one tap. The image is rendered
-            from the URL. No copy of your wallet sits on our servers.
+            save the card, or post it on x with one tap. the image is rendered
+            from the url. no copy of your wallet sits on our servers.
           </p>
 
           <div className="flex flex-col gap-3">
@@ -93,7 +93,7 @@ export function ShareActions({
               type="button"
               onClick={downloadPng}
               disabled={downloading}
-              className="inline-flex items-center justify-between gap-3 border border-ink/80 px-4 py-3 text-[13px] tracking-[0.2em] uppercase text-ink hover:bg-ink hover:text-paper disabled:text-muted-2 disabled:border-rule disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
+              className="inline-flex items-center justify-between gap-3 border border-ink/80 px-4 py-3 text-[13px] tracking-[0.2em] lowercase text-ink hover:bg-ink hover:text-paper disabled:text-muted-2 disabled:border-rule disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
             >
               <span>
                 {downloading ? "Rendering…" : "Download PNG"}
@@ -104,9 +104,9 @@ export function ShareActions({
               href={intentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-between gap-3 border border-ink/80 px-4 py-3 text-[13px] tracking-[0.2em] uppercase text-ink hover:bg-ink hover:text-paper transition-colors focus-ring rounded-sm"
+              className="inline-flex items-center justify-between gap-3 border border-ink/80 px-4 py-3 text-[13px] tracking-[0.2em] lowercase text-ink hover:bg-ink hover:text-paper transition-colors focus-ring rounded-sm"
             >
-              <span>Share on X</span>
+              <span>share on x</span>
               <span aria-hidden>↗</span>
             </a>
           </div>
@@ -116,8 +116,8 @@ export function ShareActions({
           )}
 
           <p className="text-[12px] text-muted leading-relaxed max-w-[44ch]">
-            <span className="italic">Privacy ≠ anonymity.</span> v1 ships
-            guidance and curated tools. One tap fixes ship in v1.5.
+            <span className="italic">privacy ≠ anonymity.</span> v1 ships
+            guidance and curated tools. one tap fixes ship in v1.5.
           </p>
         </div>
       </div>
@@ -155,7 +155,7 @@ function SharePreview({ ogPath, alt }: { ogPath: string; alt: string }) {
           className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-[13px] text-muted hover:text-ink transition-colors"
         >
           <span className="font-italic-serif text-[18px] text-ink-soft">
-            Card couldn&rsquo;t render inline.
+            card couldn&rsquo;t render inline.
           </span>
           <span className="underline decoration-rule decoration-1 underline-offset-[5px]">
             open card in a new tab ↗
@@ -163,7 +163,7 @@ function SharePreview({ ogPath, alt }: { ogPath: string; alt: string }) {
         </a>
       )}
       {state === "loading" && (
-        <div className="absolute inset-0 flex items-center justify-center text-[11px] tracking-[0.22em] uppercase text-muted-2 pulse-soft">
+        <div className="absolute inset-0 flex items-center justify-center text-[11px] tracking-[0.22em] lowercase text-muted-2 pulse-soft">
           rendering card…
         </div>
       )}
@@ -182,12 +182,12 @@ function buildTweetCopy({
   score: number;
   delta: number | null;
 }): string {
-  const base = `My Solana Privacy Score is ${score}/100.`;
+  const base = `my solana privacy score is ${score}/100.`;
   const middle =
     delta !== null && delta > 0
-      ? ` Just tightened +${delta} points.`
+      ? ` just tightened +${delta} points.`
       : delta !== null && delta < 0
-        ? ` Slipped ${delta} points, re tightening.`
+        ? ` slipped ${delta} points, re tightening.`
         : "";
-  return `${base}${middle} Audit yours →`;
+  return `${base}${middle} audit yours →`;
 }

@@ -8,12 +8,12 @@ import { heliusRpcUrl } from "./helius";
  *  Throws on invalid input. */
 export async function resolveAddressInput(rawInput: string): Promise<string> {
   const input = rawInput.trim();
-  if (!input) throw new Error("Please enter a Solana address or .sol name.");
+  if (!input) throw new Error("please enter a solana address or .sol name.");
 
   // .sol name
   if (input.toLowerCase().endsWith(".sol")) {
     const name = input.slice(0, -4);
-    if (!name) throw new Error("That .sol name is empty.");
+    if (!name) throw new Error("that .sol name is empty.");
     const conn = new Connection(heliusRpcUrl(), "confirmed");
     try {
       const owner = await bonfidaResolve(conn, name);

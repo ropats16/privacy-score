@@ -104,7 +104,7 @@ export async function GET(req: Request) {
               fontFamily: SANS,
               fontSize: 18,
               letterSpacing: "0.22em",
-              textTransform: "uppercase",
+              textTransform: "lowercase",
             }}
           >
             <div
@@ -154,12 +154,12 @@ export async function GET(req: Request) {
                   fontFamily: SANS,
                   fontSize: 18,
                   letterSpacing: "0.22em",
-                  textTransform: "uppercase",
+                  textTransform: "lowercase",
                   color: COLORS.muted,
                   marginBottom: 16,
                 }}
               >
-                Privacy Score
+                privacy score
               </div>
               <div
                 style={{
@@ -245,11 +245,11 @@ export async function GET(req: Request) {
                     fontFamily: SANS,
                     fontSize: 16,
                     letterSpacing: "0.22em",
-                    textTransform: "uppercase",
+                    textTransform: "lowercase",
                     color: COLORS.muted,
                   }}
                 >
-                  Audit
+                  audit
                 </div>
                 <div
                   style={{
@@ -308,7 +308,7 @@ export async function GET(req: Request) {
                     fontFamily: SANS,
                     fontSize: 16,
                     letterSpacing: "0.18em",
-                    textTransform: "uppercase",
+                    textTransform: "lowercase",
                   }}
                 >
                   watch only
@@ -325,7 +325,7 @@ export async function GET(req: Request) {
                   maxWidth: 480,
                 }}
               >
-                Privacy ≠ anonymity. We show you what your wallet is already
+                privacy ≠ anonymity. we show you what your wallet is already
                 showing the world.
               </div>
             </div>
@@ -341,7 +341,7 @@ export async function GET(req: Request) {
               fontFamily: SANS,
               fontSize: 18,
               letterSpacing: "0.22em",
-              textTransform: "uppercase",
+              textTransform: "lowercase",
               marginTop: 24,
             }}
           >
@@ -353,7 +353,7 @@ export async function GET(req: Request) {
                 backgroundColor: COLORS.rule,
               }}
             />
-            <div style={{ display: "flex" }}>Audit yours →</div>
+            <div style={{ display: "flex" }}>audit yours →</div>
           </div>
         </div>
       ),
@@ -395,7 +395,7 @@ export async function GET(req: Request) {
               fontSize: 24,
               color: COLORS.muted,
               letterSpacing: "0.22em",
-              textTransform: "uppercase",
+              textTransform: "lowercase",
               marginTop: 8,
             }}
           >

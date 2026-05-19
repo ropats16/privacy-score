@@ -9,10 +9,10 @@ export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
     return (
       <div className="border border-dashed border-rule-soft p-6 rounded-sm">
         <p className="font-italic-serif text-[20px] text-ink-soft">
-          Nothing pressing to fix.
+          nothing pressing to fix.
         </p>
         <p className="text-[13px] text-muted mt-2 max-w-[52ch]">
-          No factor scored below the leak threshold this scan. Re scan
+          no factor scored below the leak threshold this scan. re scan
           after future activity to keep an eye on drift.
         </p>
       </div>
@@ -62,7 +62,7 @@ function LeakReasonCard({
 
         {/* Main column */}
         <div className="md:col-span-8 flex flex-col gap-3">
-          <div className="flex items-baseline gap-2 md:gap-3 text-[11px] tracking-[0.22em] uppercase text-muted flex-wrap">
+          <div className="flex items-baseline gap-2 md:gap-3 text-[11px] tracking-[0.22em] lowercase text-muted flex-wrap">
             <span>{factorLabel(reason.factorKey)}</span>
             <span aria-hidden className="text-muted-2">
               ·
@@ -81,7 +81,7 @@ function LeakReasonCard({
             <button
               type="button"
               onClick={() => setSignalsOpen((v) => !v)}
-              className="text-[12px] tracking-[0.18em] uppercase text-muted hover:text-ink transition-colors flex items-center gap-2"
+              className="text-[12px] tracking-[0.18em] lowercase text-muted hover:text-ink transition-colors flex items-center gap-2"
               aria-expanded={signalsOpen}
             >
               <span>{signalsOpen ? "Hide raw signals" : "Show raw signals"}</span>
@@ -113,9 +113,9 @@ function LeakReasonCard({
 
           {/* Recommendation */}
           <div className="mt-4 pt-5 border-t border-rule-soft flex flex-col gap-3">
-            <div className="flex items-baseline gap-3 text-[11px] tracking-[0.22em] uppercase text-muted">
+            <div className="flex items-baseline gap-3 text-[11px] tracking-[0.22em] lowercase text-muted">
               <span aria-hidden className="w-6 h-px bg-rule" />
-              <span>Recommended action</span>
+              <span>recommended action</span>
             </div>
             <h4 className="text-[16px] text-ink leading-snug">
               {reason.recommendation.headline}
@@ -151,7 +151,7 @@ function LeakReasonCard({
             )}
             {!reason.recommendation.inAppFixAvailable && (
               <p className="text-[11px] text-muted-2 italic mt-1">
-                v1 ships guidance + curated links. In-app one-click fixes come in v1.5.
+                v1 ships guidance + curated links. in-app one-click fixes come in v1.5.
               </p>
             )}
           </div>
@@ -159,8 +159,8 @@ function LeakReasonCard({
 
         {/* Right column: estimated lift */}
         <div className="md:col-span-3 flex md:flex-col items-center md:items-end justify-between md:justify-start gap-3 md:gap-1 pt-3 md:pt-0 border-t border-rule-soft md:border-t-0 md:border-l md:border-rule-soft md:pl-6">
-          <span className="text-[11px] tracking-[0.22em] uppercase text-muted">
-            Estimated lift
+          <span className="text-[11px] tracking-[0.22em] lowercase text-muted">
+            estimated lift
           </span>
           <div className="flex items-baseline gap-1">
             <span className="font-display text-[36px] md:text-[56px] leading-none text-ink tabular">
@@ -169,7 +169,7 @@ function LeakReasonCard({
             <span className="text-[14px] text-muted">pts</span>
           </div>
           <p className="text-[11px] text-muted md:text-right max-w-[20ch] hidden sm:block">
-            Max headroom if this factor is fully addressed.
+            max headroom if this factor is fully addressed.
           </p>
         </div>
       </div>
@@ -180,17 +180,17 @@ function LeakReasonCard({
 function factorLabel(key: LeakReason["factorKey"]): string {
   switch (key) {
     case "cluster":
-      return "Cluster footprint";
+      return "cluster footprint";
     case "kyc":
-      return "KYC distance";
+      return "kyc distance";
     case "identity":
-      return "Identity exposure";
+      return "identity exposure";
     case "connected":
-      return "Connected apps";
+      return "connected apps";
     case "wealth":
-      return "Visible wealth";
+      return "visible wealth";
     case "surveillance":
-      return "Surveillance";
+      return "surveillance";
   }
 }
 

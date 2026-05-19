@@ -88,7 +88,7 @@ export function ScanView({ address }: { address: string }) {
       })
       .catch((err: unknown) => {
         if (ac.signal.aborted) return;
-        setError(err instanceof Error ? err.message : "Scan failed.");
+        setError(err instanceof Error ? err.message : "scan failed.");
         setPhase("error");
       });
     return () => ac.abort();
@@ -126,15 +126,14 @@ export function ScanView({ address }: { address: string }) {
   return (
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
-          <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
-            sneakpeek
+        <Link href="/" className="group">
+          <span className="font-display text-[20px] md:text-[22px] font-semibold text-ink">
+            sneak peek 👀
           </span>
         </Link>
         <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">
           <Link href="/" className="hover:text-ink transition-colors">
-            Scan another
+            scan another
           </Link>
         </nav>
       </header>
@@ -144,7 +143,7 @@ export function ScanView({ address }: { address: string }) {
           {/* Address + window meta */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6">
             <div className="flex flex-col gap-3 min-w-0">
-              <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted flex-wrap">
+              <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted flex-wrap">
                 <span aria-hidden className="w-8 h-px bg-rule" />
                 <span>wallet audit</span>
                 <span aria-hidden className="text-muted-2">·</span>
@@ -154,14 +153,14 @@ export function ScanView({ address }: { address: string }) {
                 <span aria-hidden className="text-muted-2">·</span>
                 <span
                   className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[12px] text-muted"
-                  title="Read only audit. Share cards are watermarked."
+                  title="read only audit. share cards are watermarked."
                 >
                   <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-muted-2" />
                   watch only
                 </span>
               </div>
               <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
-                <span className="font-italic-serif text-muted">Your wallet&rsquo;s privacy score · </span>
+                <span className="font-italic-serif text-muted">your wallet&rsquo;s privacy score · </span>
                 <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
                   {shortAddress(address, 6, 6)}
                 </span>
@@ -172,7 +171,7 @@ export function ScanView({ address }: { address: string }) {
                 type="button"
                 onClick={reScan}
                 disabled={phase === "scanning"}
-                className="inline-flex items-center gap-2 text-[12px] tracking-[0.2em] uppercase text-ink hover:text-accent disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
+                className="inline-flex items-center gap-2 text-[12px] tracking-[0.2em] lowercase text-ink hover:text-accent disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
               >
                 <span
                   aria-hidden
@@ -197,8 +196,8 @@ export function ScanView({ address }: { address: string }) {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
               <div className="md:col-span-7 flex items-start gap-5">
                 <div className="flex flex-col w-full">
-                  <span className="text-[11px] tracking-[0.22em] uppercase text-muted mb-3">
-                    Privacy Score
+                  <span className="text-[11px] tracking-[0.22em] lowercase text-muted mb-3">
+                    privacy score
                   </span>
                   <div className="flex items-end gap-3 relative">
                     {scan ? (
@@ -304,9 +303,9 @@ export function ScanView({ address }: { address: string }) {
           {scan && (
             <section className="flex flex-col gap-5">
               <div className="flex items-baseline justify-between gap-4">
-                <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
+                <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted">
                   <span aria-hidden className="w-8 h-px bg-rule" />
-                  <span>Try these fixes</span>
+                  <span>try these fixes</span>
                 </div>
                 <span className="text-[12px] text-muted-2">
                   ranked by score lift
@@ -346,7 +345,7 @@ export function ScanView({ address }: { address: string }) {
 
       <footer className="px-8 md:px-14 pb-8 pt-10">
         <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
-          <div>© Sneakpeek 2026</div>
+          <div>© sneak peek 2026</div>
         </div>
       </footer>
     </div>
@@ -356,17 +355,17 @@ export function ScanView({ address }: { address: string }) {
 function titleFor(k: keyof typeof WEIGHTS): string {
   switch (k) {
     case "identity":
-      return "Identity exposure";
+      return "identity exposure";
     case "kyc":
-      return "KYC distance";
+      return "kyc distance";
     case "cluster":
-      return "Cluster footprint";
+      return "cluster footprint";
     case "connected":
-      return "Connected apps";
+      return "connected apps";
     case "wealth":
-      return "Visible wealth";
+      return "visible wealth";
     case "surveillance":
-      return "Surveillance coverage";
+      return "surveillance coverage";
   }
 }
 
@@ -374,7 +373,7 @@ function PendingChip({ title, weight }: { title: string; weight: number }) {
   return (
     <div className="flex flex-col gap-3 p-5 border border-rule-soft border-dashed bg-paper rounded-sm pulse-soft">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] tracking-[0.2em] uppercase text-muted">
+        <span className="text-[11px] tracking-[0.2em] lowercase text-muted">
           {title}
         </span>
         <span className="text-[11px] tabular text-muted-2">w {weight}</span>
@@ -389,24 +388,24 @@ function heroCopy(
   scan: Scan | null,
   totalDelta: number | null
 ): string {
-  if (phase === "error") return "Something stopped the audit before we could read the chain.";
+  if (phase === "error") return "something stopped the audit before we could read the chain.";
   if (phase === "scanning") {
     return scan
       ? "Re reading the last ninety days. Hold tight…"
       : "Reading ninety days of public onchain activity…";
   }
-  if (!scan) return "Reading ninety days of public onchain activity…";
+  if (!scan) return "reading ninety days of public onchain activity…";
   if (totalDelta !== null) {
     if (totalDelta > 0)
       return `Quieter than last time. You tightened ${totalDelta} point${totalDelta === 1 ? "" : "s"}.`;
     if (totalDelta < 0)
       return `Slipped ${Math.abs(totalDelta)} point${totalDelta === -1 ? "" : "s"} since last scan.`;
-    return "No change since last scan. Pick a top reason to tighten.";
+    return "no change since last scan. pick a top reason to tighten.";
   }
   const band = scoreBand(scan.totalScore);
-  if (band === "high") return "You leave a small footprint. Stay disciplined.";
-  if (band === "mid") return "Moderate exposure. A few easy wins ahead.";
-  return "Broad, distinctive surface. Plenty to tighten.";
+  if (band === "high") return "you leave a small footprint. stay disciplined.";
+  if (band === "mid") return "moderate exposure. a few easy wins ahead.";
+  return "broad, distinctive surface. plenty to tighten.";
 }
 
 function CelebrationBurst({ trigger }: { trigger: number }) {
@@ -460,7 +459,7 @@ async function runScan(
     });
     const factor: Factor = {
       key: "cluster",
-      title: "Cluster footprint",
+      title: "cluster footprint",
       weight: WEIGHTS.cluster,
       score,
       signals: {
@@ -481,7 +480,7 @@ async function runScan(
       });
       const factor: Factor = {
         key: "kyc",
-        title: "KYC distance",
+        title: "kyc distance",
         weight: WEIGHTS.kyc,
         score,
         signals: {
@@ -501,7 +500,7 @@ async function runScan(
       const { score, signals: scored } = scoreWealth(signals);
       const factor: Factor = {
         key: "wealth",
-        title: "Visible wealth",
+        title: "visible wealth",
         weight: WEIGHTS.wealth,
         score,
         signals: {
@@ -524,7 +523,7 @@ async function runScan(
       });
       const factor: Factor = {
         key: "identity",
-        title: "Identity exposure",
+        title: "identity exposure",
         weight: WEIGHTS.identity,
         score,
         signals: {
@@ -539,7 +538,7 @@ async function runScan(
     .catch((err) => {
       // Don't fail the whole scan if Bonfida/AllDomains hiccups — score
       // identity as "no detected presence" and surface a soft error in trace.
-      console.warn("Identity factor failed", err);
+      console.warn("identity factor failed", err);
       const { score, signals: scored } = scoreIdentity({
         nameCount: 0,
         exposedRecordCount: 0,
@@ -547,7 +546,7 @@ async function runScan(
       });
       const factor: Factor = {
         key: "identity",
-        title: "Identity exposure",
+        title: "identity exposure",
         weight: WEIGHTS.identity,
         score,
         signals: {
@@ -584,7 +583,7 @@ async function runScan(
     });
     const connectedFactor: Factor = {
       key: "connected",
-      title: "Connected apps",
+      title: "connected apps",
       weight: WEIGHTS.connected,
       score: cScore,
       signals: {
@@ -602,7 +601,7 @@ async function runScan(
     });
     const surveillanceFactor: Factor = {
       key: "surveillance",
-      title: "Surveillance coverage",
+      title: "surveillance coverage",
       weight: WEIGHTS.surveillance,
       score: sScore,
       signals: {

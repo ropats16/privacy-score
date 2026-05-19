@@ -44,7 +44,7 @@ export function buildLeakReason(
       return {
         factorKey: "kyc",
         severity,
-        title: "A centralized exchange can link this wallet to you.",
+        title: "a centralized exchange can link this wallet to you.",
         plainEnglish: kycCopy(factor),
         signals: factor.signals,
         recommendation: kycRecommendation(),
@@ -54,7 +54,7 @@ export function buildLeakReason(
       return {
         factorKey: "connected",
         severity,
-        title: "Programs still hold standing permissions on your wallet.",
+        title: "programs still hold standing permissions on your wallet.",
         plainEnglish: connectedCopy(factor),
         signals: factor.signals,
         recommendation: connectedRecommendation(),
@@ -64,7 +64,7 @@ export function buildLeakReason(
       return {
         factorKey: "wealth",
         severity,
-        title: "Your visible balance makes you a target.",
+        title: "your visible balance makes you a target.",
         plainEnglish: wealthCopy(factor),
         signals: factor.signals,
         recommendation: wealthRecommendation(),
@@ -74,7 +74,7 @@ export function buildLeakReason(
       return {
         factorKey: "identity",
         severity,
-        title: "Your name records tie this wallet to your identity.",
+        title: "your name records tie this wallet to your identity.",
         plainEnglish: identityCopy(factor),
         signals: factor.signals,
         recommendation: identityRecommendation(),
@@ -84,7 +84,7 @@ export function buildLeakReason(
       return {
         factorKey: "surveillance",
         severity,
-        title: "This wallet has touched sanctioned addresses.",
+        title: "this wallet has touched sanctioned addresses.",
         plainEnglish: surveillanceCopy(factor),
         signals: factor.signals,
         recommendation: surveillanceRecommendation(),
@@ -99,7 +99,7 @@ function identityCopy(f: Factor): string {
   const names = Number(f.signals.namesOwned ?? 0);
   const records = Number(f.signals.exposedRecords ?? 0);
   const handleMatch = String(f.signals.nameMatchesHandle ?? "no") === "yes";
-  if (names === 0) return "No name presence detected. Nothing to fix here.";
+  if (names === 0) return "no name presence detected. nothing to fix here.";
   const bits: string[] = [];
   bits.push(
     `${names} name${names === 1 ? "" : "s"} owned by this wallet`
@@ -117,7 +117,7 @@ function identityRecommendation(): RecommendedAction {
   return {
     headline: "Stop using your named wallet for everything.",
     detail:
-      "Keep the named wallet for public activity only and route sensitive payments through a separate, unnamed address. Once a name is widely linked to you, no amount of editing records will unpublish that history.",
+      "keep the named wallet for public activity only and route sensitive payments through a separate, unnamed address. once a name is widely linked to you, no amount of editing records will unpublish that history.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.identity,
   };
@@ -132,14 +132,14 @@ function surveillanceCopy(f: Factor): string {
   if (inbound > 0) {
     return `This wallet received value from ${inbound} OFAC SDN listed address${inbound === 1 ? "" : "es"}. Inbound transfers from flagged senders are almost always unsolicited (dust drops, spam tokens, address poisoning). Don't interact with them. Receiving alone does not constitute wrongdoing.`;
   }
-  return "No flagged interactions in the last 90 days.";
+  return "no flagged interactions in the last 90 days.";
 }
 
 function surveillanceRecommendation(): RecommendedAction {
   return {
     headline: "Don't interact. Verify before acting.",
     detail:
-      "Ignore inbound contact from flagged senders and never return funds or touch tokens they sent. For any outbound transfer you see flagged, look up the address against the official list before taking further action.",
+      "ignore inbound contact from flagged senders and never return funds or touch tokens they sent. for any outbound transfer you see flagged, look up the address against the official list before taking further action.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.surveillance,
   };
@@ -177,7 +177,7 @@ function connectedCopy(f: Factor): string {
   const active = Number(f.signals.activeDelegations ?? 0) + Number(f.signals.activeStakeAuthorities ?? 0);
   const stale = Number(f.signals.staleDelegations ?? 0) + Number(f.signals.staleStakeAuthorities ?? 0);
   const total = active + stale;
-  if (total === 0) return "No standing permissions detected.";
+  if (total === 0) return "no standing permissions detected.";
   const parts: string[] = [];
   if (active) parts.push(`${active} active`);
   if (stale) parts.push(`${stale} stale`);

@@ -7,7 +7,7 @@ export const HELIUS_KEY = process.env.NEXT_PUBLIC_HELIUS_API_KEY ?? "";
 export function heliusRpcUrl(): string {
   if (!HELIUS_KEY) {
     throw new Error(
-      "NEXT_PUBLIC_HELIUS_API_KEY is not set. Add it to .env.local."
+      "next_public_helius_api_key is not set. add it to .env.local."
     );
   }
   return `https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`;
@@ -16,7 +16,7 @@ export function heliusRpcUrl(): string {
 function enhancedTxUrl(address: string, before?: string): string {
   if (!HELIUS_KEY) {
     throw new Error(
-      "NEXT_PUBLIC_HELIUS_API_KEY is not set. Add it to .env.local."
+      "next_public_helius_api_key is not set. add it to .env.local."
     );
   }
   const u = new URL(
@@ -233,8 +233,8 @@ function collectPeers(tx: EnhancedTx): string[] {
 
 function prettyFromSource(src: string): string {
   // "BINANCE" -> "Binance", "CRYPTO_COM" -> "Crypto.com", "GATE_IO" -> "Gate.io"
-  if (src === "CRYPTO_COM") return "Crypto.com";
-  if (src === "GATE_IO") return "Gate.io";
+  if (src === "CRYPTO_COM") return "crypto.com";
+  if (src === "GATE_IO") return "gate.io";
   return src.charAt(0) + src.slice(1).toLowerCase();
 }
 
