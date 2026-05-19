@@ -133,6 +133,11 @@ export default function LandingPage() {
               We don&rsquo;t hide you. We show you what&rsquo;s already public.
             </span>
           </div>
+          <div className="flex gap-6">
+            <Link href="/methodology" className="hover:text-ink transition-colors">
+              How the score is built
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
