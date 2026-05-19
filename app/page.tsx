@@ -1,65 +1,142 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { resolveAddressInput } from "@/lib/resolve";
+import { ConnectButton } from "@/components/ConnectButton";
+import { useWallet } from "@solana/wallet-adapter-react";
+
+export default function LandingPage() {
+  const router = useRouter();
+  const { publicKey } = useWallet();
+  const [value, setValue] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  function auditConnected() {
+    if (!publicKey) return;
+    router.push(`/w/${publicKey.toBase58()}`);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    if (!value.trim()) return;
+    setBusy(true);
+    try {
+      const addr = await resolveAddressInput(value);
+      router.push(`/w/${addr}`);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setBusy(false);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="relative z-10 flex-1 flex flex-col">
+      <header className="flex items-center justify-between px-8 md:px-14 pt-8">
+        <Link href="/" className="flex items-center gap-2 group">
+          <span aria-hidden className="inline-block w-2.5 h-2.5 rounded-full bg-ink" />
+          <span className="text-[13px] tracking-[0.18em] uppercase text-ink-soft">
+            PrivacyScore
+          </span>
+        </Link>
+        <nav className="text-[13px] text-muted flex items-center gap-6">
+          <Link href="/methodology" className="hover:text-ink transition-colors">
+            Methodology
+          </Link>
+          <ConnectButton />
+        </nav>
+      </header>
+
+      <main className="flex-1 flex items-center justify-center px-6 md:px-14">
+        <div className="w-full max-w-[860px] -mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.2, 0.7, 0.1, 1] }}
+            className="flex flex-col gap-10"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] uppercase text-muted">
+              <span aria-hidden className="w-8 h-px bg-rule" />
+              <span>An audit, not a verdict</span>
+            </div>
+
+            <h1 className="font-display text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
+              See what your wallet
+              <br />
+              <span className="font-italic-serif text-ink">is quietly showing.</span>
+            </h1>
+
+            <p className="max-w-[52ch] text-[17px] md:text-[18px] leading-[1.55] text-ink-soft">
+              Paste any Solana address. We&rsquo;ll spend about thirty seconds reading
+              ninety days of public on-chain activity and give you one number
+              between 0 and 100. Higher means more private. The math is open.
+            </p>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <div className="flex items-end gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">
+                <input
+                  autoFocus
+                  spellCheck={false}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  type="text"
+                  inputMode="text"
+                  placeholder="paste a solana address, or a .sol name"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  className="input-bare flex-1 text-[24px] md:text-[28px] text-ink leading-tight"
+                  aria-label="Solana address or .sol name"
+                  disabled={busy}
+                />
+                <button
+                  type="submit"
+                  disabled={busy || !value.trim()}
+                  className="font-display text-[20px] md:text-[22px] leading-none text-ink hover:italic transition-[font-style] disabled:opacity-40 focus-ring"
+                >
+                  {busy ? "resolving…" : "audit →"}
+                </button>
+              </div>
+              {error && (
+                <p className="text-[14px] text-[color:var(--score-low)]">{error}</p>
+              )}
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <p className="text-[13px] text-muted">
+                  Read-only. No wallet connection. Nothing is stored.
+                </p>
+                {publicKey && (
+                  <button
+                    type="button"
+                    onClick={auditConnected}
+                    className="text-[13px] text-ink-soft hover:text-ink transition-colors underline decoration-rule decoration-1 underline-offset-[5px] focus-ring"
+                  >
+                    audit my connected wallet →
+                  </button>
+                )}
+              </div>
+            </form>
+          </motion.div>
         </div>
       </main>
+
+      <footer className="px-8 md:px-14 pb-8 pt-16">
+        <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
+          <div>
+            <span className="italic">Privacy ≠ anonymity.</span>{" "}
+            <span>
+              We don&rsquo;t hide you. We show you what&rsquo;s already public.
+            </span>
+          </div>
+          <div className="flex gap-6">
+            <Link href="/methodology" className="hover:text-ink transition-colors">
+              How the score is built
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
