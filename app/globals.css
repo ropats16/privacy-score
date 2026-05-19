@@ -125,3 +125,48 @@ textarea {
   50% { opacity: 1; }
 }
 .pulse-soft { animation: softPulse 1.6s ease-in-out infinite; }
+
+/* Family-style soft card. Layered shadow + hairline inner stroke + warm tint. */
+.card-soft {
+  background: #ebe6dd;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 17, 13, 0.05),
+    0 1px 2px rgba(20, 17, 13, 0.03),
+    0 18px 36px -22px rgba(20, 17, 13, 0.12);
+}
+
+.card-soft-row + .card-soft-row {
+  border-top: 1px solid rgba(20, 17, 13, 0.06);
+}
+
+/* Subtle pill for weight badges */
+.weight-pill {
+  display: inline-flex;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(20, 17, 13, 0.05);
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+}
+
+/* Refined wordmark — Family-style tight, medium-weight logo */
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.34em;
+  font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1;
+}
+.wordmark .wordmark-eye {
+  font-size: 0.72em;
+  opacity: 0.85;
+  transform: translateY(0.04em);
+  user-select: none;
+}
