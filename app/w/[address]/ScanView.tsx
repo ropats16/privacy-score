@@ -34,6 +34,7 @@ import { FactorProgressList } from "@/components/FactorProgressList";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
 import { DustPanel } from "@/components/DustPanel";
 import { ConnectButton } from "@/components/ConnectButton";
+import { ShareActions } from "@/components/ShareActions";
 import type {
   DustWarning,
   Factor,
@@ -344,6 +345,16 @@ export function ScanView({ address }: { address: string }) {
               </div>
               <LeakReasonsList reasons={scan.leakReasons} />
             </section>
+          )}
+
+          {/* Share card + actions */}
+          {scan && phase === "done" && (
+            <ShareActions
+              address={address}
+              score={scan.totalScore}
+              previousScore={prevForThis ? prevForThis.totalScore : null}
+              watchOnly={false}
+            />
           )}
 
           {/* Per-factor progress list */}

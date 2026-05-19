@@ -75,6 +75,12 @@ export default function LandingPage() {
               ninety days of public on-chain activity and give you one number
               between 0 and 100. Higher means more private. The math is open.
             </p>
+            <p className="max-w-[52ch] text-[14px] leading-[1.6] text-muted">
+              <span className="italic text-ink-soft">Privacy ≠ anonymity.</span>{" "}
+              We don&rsquo;t hide you — we show you what&rsquo;s already public,
+              in plain English, with curated fixes you do in tools you already
+              trust. One-tap in-app fixes ship in v1.5.
+            </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <div className="flex items-end gap-3 border-b border-ink/60 pb-3 transition-colors focus-within:border-ink">

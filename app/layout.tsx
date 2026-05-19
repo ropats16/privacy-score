@@ -38,7 +38,10 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col grain relative">
+      <body
+        className="min-h-full flex flex-col grain relative"
+        suppressHydrationWarning
+      >
         <WalletProviders>{children}</WalletProviders>
       </body>
     </html>
