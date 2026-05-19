@@ -27,11 +27,12 @@ import {
 import { WEIGHTS } from "@/lib/rubrics";
 import { shortAddress } from "@/lib/resolve";
 import { useScanStore } from "@/lib/scan-store";
-import { ScoreNumeral } from "@/components/ScoreNumeral";
+import { CircularScore } from "@/components/CircularScore";
 import { SubScoreChip } from "@/components/SubScoreChip";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
 import { DustPanel } from "@/components/DustPanel";
 import { ShareActions } from "@/components/ShareActions";
+import { ScanTips } from "@/components/ScanTips";
 import type {
   DustWarning,
   Factor,
@@ -161,7 +162,7 @@ export function ScanView({ address }: { address: string }) {
                 </span>
               </div>
               <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
-                <span className="font-italic-serif text-muted">your wallet&rsquo;s privacy score · </span>
+                <span className="text-muted">your privacy score · </span>
                 <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
                   {shortAddress(address, 6, 6)}
                 </span>
@@ -195,86 +196,79 @@ export function ScanView({ address }: { address: string }) {
           <section className="relative border-t border-b border-ink/80 py-10 md:py-16">
             <CelebrationBurst trigger={celebrationKey} />
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
-              <div className="md:col-span-7 flex items-start gap-5">
-                <div className="flex flex-col w-full">
-                  <span className="text-[11px] tracking-[0.22em] lowercase text-muted mb-3">
-                    privacy score
-                  </span>
-                  <div className="flex items-end gap-3 relative">
-                    {scan ? (
-                      <ScoreNumeral
-                        value={scan.totalScore}
-                        className="text-[128px] sm:text-[180px] md:text-[260px]"
-                      />
-                    ) : phase === "error" ? (
-                      <span className="score-numeral text-[96px] sm:text-[120px] md:text-[180px] text-muted-2">
-                        ··
-                      </span>
-                    ) : (
-                      <motion.span
-                        key="loading-num"
-                        className="score-numeral text-[128px] sm:text-[180px] md:text-[260px] text-muted-2 pulse-soft"
-                      >
-                        ··
-                      </motion.span>
-                    )}
-                    <span className="text-[16px] sm:text-[18px] md:text-[22px] text-muted tabular pb-4 sm:pb-6 md:pb-10">
-                      / 100
-                    </span>
-                    <AnimatePresence>
-                      {phase === "done" &&
-                        scan &&
-                        prevForThis &&
-                        totalDelta !== null &&
-                        totalDelta !== 0 && (
-                          <motion.div
-                            key={`delta-${scan.scannedAt}`}
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            transition={{
-                              delay: 1.4,
-                              duration: 0.6,
-                              ease: [0.16, 1, 0.3, 1],
-                            }}
-                            className="absolute -top-2 left-0 md:left-auto md:right-0 md:-top-4 inline-flex items-center gap-1.5 px-2 py-1 rounded-full border tabular text-[12px]"
-                            style={{
-                              color:
-                                totalDelta > 0
-                                  ? "var(--score-high)"
-                                  : "var(--score-low)",
-                              borderColor:
-                                totalDelta > 0
-                                  ? "var(--score-high)"
-                                  : "var(--score-low)",
-                              background: "rgba(241,237,228,0.85)",
-                              backdropFilter: "blur(2px)",
-                            }}
-                          >
-                            <span aria-hidden>
-                              {totalDelta > 0 ? "▲" : "▼"}
-                            </span>
-                            <span>
-                              {prevForThis.totalScore}
-                              <span className="text-muted-2 mx-1">→</span>
-                              {scan.totalScore}
-                            </span>
-                            <span className="text-muted-2">·</span>
-                            <span>
-                              {totalDelta > 0 ? "+" : ""}
-                              {totalDelta}
-                            </span>
-                          </motion.div>
-                        )}
-                    </AnimatePresence>
-                  </div>
+              <div className="md:col-span-6 flex flex-col items-center md:items-start gap-4">
+                <span className="text-[11px] tracking-[0.22em] lowercase text-muted">
+                  privacy score
+                </span>
+                <div className="relative">
+                  {scan ? (
+                    <CircularScore
+                      value={scan.totalScore}
+                      size={340}
+                      className="md:scale-100"
+                    />
+                  ) : (
+                    <div className="pulse-soft">
+                      <CircularScore value={0} size={340} showBand={false} />
+                    </div>
+                  )}
+                  <AnimatePresence>
+                    {phase === "done" &&
+                      scan &&
+                      prevForThis &&
+                      totalDelta !== null &&
+                      totalDelta !== 0 && (
+                        <motion.div
+                          key={`delta-${scan.scannedAt}`}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{
+                            delay: 1.6,
+                            duration: 0.6,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className="absolute -top-1 right-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-full border tabular text-[12px]"
+                          style={{
+                            color:
+                              totalDelta > 0
+                                ? "var(--score-high)"
+                                : "var(--score-low)",
+                            borderColor:
+                              totalDelta > 0
+                                ? "var(--score-high)"
+                                : "var(--score-low)",
+                            background: "rgba(251,248,241,0.92)",
+                            backdropFilter: "blur(2px)",
+                          }}
+                        >
+                          <span aria-hidden>
+                            {totalDelta > 0 ? "▲" : "▼"}
+                          </span>
+                          <span>
+                            {prevForThis.totalScore}
+                            <span className="text-muted-2 mx-1">→</span>
+                            {scan.totalScore}
+                          </span>
+                          <span className="text-muted-2">·</span>
+                          <span>
+                            {totalDelta > 0 ? "+" : ""}
+                            {totalDelta}
+                          </span>
+                        </motion.div>
+                      )}
+                  </AnimatePresence>
                 </div>
               </div>
 
-              <div className="md:col-span-5 flex flex-col gap-4">
-                <p className="font-italic-serif text-[22px] md:text-[26px] leading-snug text-ink-soft max-w-[34ch]">
-                  {heroCopy(phase, scan, totalDelta)}
-                </p>
+              <div className="md:col-span-6 flex flex-col gap-5">
+                {phase === "scanning" ? (
+                  <ScanTips />
+                ) : (
+                  <p className="font-display text-[22px] md:text-[28px] leading-[1.25] tracking-[-0.015em] text-ink-soft max-w-[34ch]">
+                    {heroCopy(phase, scan, totalDelta)}
+                  </p>
+                )}
               </div>
             </div>
           </section>
@@ -379,7 +373,7 @@ function PendingChip({ title, weight }: { title: string; weight: number }) {
         </span>
         <span className="text-[11px] tabular text-muted-2">w {weight}</span>
       </div>
-      <div className="font-italic-serif text-[18px] text-muted">reading…</div>
+      <div className="font-display text-[18px] text-muted">reading…</div>
     </div>
   );
 }

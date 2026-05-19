@@ -34,10 +34,10 @@ export function DustPanel({ warnings }: { warnings: DustWarning[] }) {
           </h3>
           <p className="text-[14px] leading-[1.55] text-ink-soft max-w-[64ch]">
             These addresses appear in your 90 day history because{" "}
-            <em className="font-italic-serif">they</em> sent to{" "}
-            <em className="font-italic-serif">you</em>, not the other way
-            around. they&rsquo;re spam designed to lure a return transaction or
-            trick you into copy pasting a lookalike address. they don&rsquo;t
+            <strong className="text-ink font-medium">they</strong> sent to{" "}
+            <strong className="text-ink font-medium">you</strong>, not the other
+            way around. they&rsquo;re spam designed to lure a return transaction
+            or trick you into copy pasting a lookalike address. they don&rsquo;t
             affect your score. do not interact.
           </p>
 
@@ -84,7 +84,7 @@ export function DustPanel({ warnings }: { warnings: DustWarning[] }) {
                   </li>
                 ))}
                 {dust.length > 10 && (
-                  <li className="text-[12px] text-muted italic mt-1">
+                  <li className="text-[12px] text-muted mt-1">
                     + {dust.length - 10} more dust counterparties
                   </li>
                 )}

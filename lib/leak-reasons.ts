@@ -115,9 +115,9 @@ function identityCopy(f: Factor): string {
 
 function identityRecommendation(): RecommendedAction {
   return {
-    headline: "Stop using your named wallet for everything.",
+    headline: "clean the records, then split the wallet.",
     detail:
-      "keep the named wallet for public activity only and route sensitive payments through a separate, unnamed address. once a name is widely linked to you, no amount of editing records will unpublish that history.",
+      "open sns manager and wipe any public record (twitter, url, email, discord, telegram) you don't want tied to onchain activity. then stop using the named wallet for everything: keep it for public, payable activity and route sensitive moves through a separate unnamed address. you can't unpublish history, but you can stop adding to it.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.identity,
   };
@@ -137,9 +137,9 @@ function surveillanceCopy(f: Factor): string {
 
 function surveillanceRecommendation(): RecommendedAction {
   return {
-    headline: "Don't interact. Verify before acting.",
+    headline: "verify the flag, then leave it alone.",
     detail:
-      "ignore inbound contact from flagged senders and never return funds or touch tokens they sent. for any outbound transfer you see flagged, look up the address against the official list before taking further action.",
+      "run the address through a solana native risk screen (range) and confirm the hit against the official ofac sdn list before doing anything else. for inbound transfers from flagged senders: ignore them, do not return funds, do not touch dust tokens they sent. for any outbound transfer you find flagged, escalate to your counsel rather than acting on your own.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.surveillance,
   };
@@ -153,9 +153,9 @@ function clusterCopy(f: Factor): string {
 
 function clusterRecommendation(): RecommendedAction {
   return {
-    headline: "Stop using one wallet for every intent.",
+    headline: "push high frequency activity onto ephemeral rails.",
     detail:
-      "Route trading, NFTs, payments, and long term holdings through different addresses going forward so no single wallet aggregates your full behavior. You can't untouch counterparties you've already touched, but you can stop adding to the pile.",
+      "the cheapest fix for a wide cluster is to stop widening it. push trading, gaming, and any high frequency dapp interaction onto magicblock ephemeral rollups so each session writes to short lived state rather than your mainnet graph. keep payments and long hold on separate addresses, and never let one wallet aggregate your full behavior again.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.cluster,
   };
@@ -186,9 +186,9 @@ function connectedCopy(f: Factor): string {
 
 function connectedRecommendation(): RecommendedAction {
   return {
-    headline: "Revoke any delegation you don't actively use.",
+    headline: "sweep approvals through revoke.cash, every quarter.",
     detail:
-      "Once a quarter, sweep your standing approvals and revoke anything you don't recognise or no longer use. Stale delegations from forgotten dApps are the easiest entry point a future exploit will reach for.",
+      "open revoke.cash for solana, list every standing spl token delegation and stake authority on this wallet, and revoke anything you don't recognise or no longer use. set a recurring calendar reminder (one sweep per quarter) so stale approvals don't accumulate. revoking costs a fraction of a cent. forgetting to revoke is the cheapest entry point a future exploit will reach for.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.connected,
   };
@@ -203,9 +203,9 @@ function wealthCopy(f: Factor): string {
 
 function wealthRecommendation(): RecommendedAction {
   return {
-    headline: "Stop using one address as both wallet and vault.",
+    headline: "move the vault behind a squads multisig.",
     detail:
-      "Keep day to day spending money on this wallet and move long term value to a separate cold or vault address you can fund privately. You can't unpublish the current balance, but you can stop adding to it.",
+      "keep day to day spend on this address. stand up a squads multisig vault for long hold value with a threshold of signers and, ideally, a time lock on large outflows. a hardened custody address that you don't paste into random dapps is harder to phish, drain, or physically target than a single hot wallet showing the full balance.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.wealth,
   };
@@ -213,9 +213,9 @@ function wealthRecommendation(): RecommendedAction {
 
 function kycRecommendation(): RecommendedAction {
   return {
-    headline: "Stop funding this wallet straight from a CEX.",
+    headline: "fund through a stealth address, not direct from cex.",
     detail:
-      "If this address is for sensitive activity, fund it through an intermediate wallet you control instead of straight off your KYC'd exchange account. Each extra hop adds real legal distance between your identity and what this wallet does.",
+      "for any sensitive activity, never receive funds straight from your kyc'd exchange. use umbra to derive a one time stealth address only you can spend from, send the cex withdrawal there, then move into this wallet. each hop adds real legal distance between your identity and what this wallet does.",
     inAppFixAvailable: false,
     links: RECOMMENDATIONS.kyc,
   };

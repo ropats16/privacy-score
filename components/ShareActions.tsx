@@ -83,7 +83,7 @@ export function ShareActions({
 
         {/* Actions */}
         <div className="md:col-span-5 flex flex-col gap-4">
-          <p className="font-italic-serif text-[20px] leading-snug text-ink-soft max-w-[36ch]">
+          <p className="font-display text-[20px] leading-snug text-ink-soft max-w-[36ch]">
             save the card, or post it on x with one tap. the image is rendered
             from the url. no copy of your wallet sits on our servers.
           </p>
@@ -116,7 +116,7 @@ export function ShareActions({
           )}
 
           <p className="text-[12px] text-muted leading-relaxed max-w-[44ch]">
-            <span className="italic">privacy ≠ anonymity.</span> v1 ships
+            <span className="text-ink">privacy ≠ anonymity.</span> v1 ships
             guidance and curated tools. one tap fixes ship in v1.5.
           </p>
         </div>
@@ -154,7 +154,7 @@ function SharePreview({ ogPath, alt }: { ogPath: string; alt: string }) {
           rel="noopener noreferrer"
           className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-[13px] text-muted hover:text-ink transition-colors"
         >
-          <span className="font-italic-serif text-[18px] text-ink-soft">
+          <span className="font-display text-[18px] text-ink-soft">
             card couldn&rsquo;t render inline.
           </span>
           <span className="underline decoration-rule decoration-1 underline-offset-[5px]">

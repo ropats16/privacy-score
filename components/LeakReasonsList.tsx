@@ -8,7 +8,7 @@ export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
   if (reasons.length === 0) {
     return (
       <div className="border border-dashed border-rule-soft p-6 rounded-sm">
-        <p className="font-italic-serif text-[20px] text-ink-soft">
+        <p className="font-display text-[20px] text-ink-soft">
           nothing pressing to fix.
         </p>
         <p className="text-[13px] text-muted mt-2 max-w-[52ch]">
@@ -150,7 +150,7 @@ function LeakReasonCard({
               </ul>
             )}
             {!reason.recommendation.inAppFixAvailable && (
-              <p className="text-[11px] text-muted-2 italic mt-1">
+              <p className="text-[11px] text-muted-2 mt-1">
                 v1 ships guidance + curated links. in-app one-click fixes come in v1.5.
               </p>
             )}

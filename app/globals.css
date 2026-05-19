@@ -92,7 +92,6 @@ textarea {
 
 .score-numeral {
   font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  font-style: italic;
   font-feature-settings: "ss01";
   letter-spacing: -0.04em;
   line-height: 0.82;
