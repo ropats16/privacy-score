@@ -46,7 +46,7 @@ export default function LandingPage() {
         </Link>
       </header>
 
-      <main className="relative flex-1 flex items-center gap-6 lg:gap-10 px-5 md:px-14 py-10 md:py-0">
+      <main className="relative flex-1 flex items-center px-5 md:px-14 py-10 md:py-0 -ml-24">
         <Image
           src="/character_1.png"
           alt=""
@@ -54,9 +54,9 @@ export default function LandingPage() {
           width={1254}
           height={1254}
           priority
-          className="hidden md:block flex-shrink-0 w-[260px] lg:w-[340px] xl:w-[420px] h-auto pointer-events-none select-none"
+          className="hidden md:block flex-shrink-0 w-[460px] lg:w-[560px] xl:w-[640px] h-auto pointer-events-none select-none -scale-x-100"
         />
-        <div className="relative z-10 w-full max-w-[860px] -mt-8">
+        <div className="relative z-10 w-full max-w-[860px] -mt-8 -ml-20">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
