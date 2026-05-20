@@ -43,7 +43,7 @@ export default function LandingPage() {
         </Link>
       </header>
 
-      <main className="relative flex-1 flex flex-col items-center justify-center lg:flex-row lg:items-center lg:justify-normal px-5 md:px-14 py-8 lg:py-0 lg:-ml-24">
+      <main className="relative flex-1 flex flex-col items-center justify-center lg:flex-row lg:items-center lg:justify-normal lg:gap-12 px-5 md:px-14 py-8 lg:py-0 lg:-ml-24">
         {/* Character — sits below the copy on mobile/tablet, beside it on
             desktop. The PNG is cropped tight to the artwork; a controlled
             margin (not mt-auto) keeps it tucked under the copy as a centered
@@ -55,9 +55,9 @@ export default function LandingPage() {
           width={698}
           height={717}
           priority
-          className="order-2 lg:order-1 mt-[clamp(1.25rem,4.5vh,2.75rem)] lg:mt-0 w-auto h-[clamp(9.5rem,27dvh,15.5rem)] sm:h-[34dvh] lg:h-auto max-w-full lg:max-w-none lg:w-[400px] xl:w-[540px] 2xl:w-[620px] lg:flex-shrink-0 pointer-events-none select-none -scale-x-100"
+          className="order-2 lg:order-1 mt-[clamp(1.25rem,4.5vh,2.75rem)] lg:mt-0 w-auto h-[clamp(9.5rem,27dvh,15.5rem)] sm:h-[34dvh] lg:h-auto max-w-full lg:max-w-none lg:w-[360px] xl:w-[480px] 2xl:w-[580px] lg:flex-shrink-0 pointer-events-none select-none -scale-x-100"
         />
-        <div className="relative z-10 w-full max-w-[860px] order-1 lg:order-2 lg:-mt-8 lg:-ml-20">
+        <div className="relative z-10 w-full max-w-[860px] order-1 lg:order-2 lg:-mt-8">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
