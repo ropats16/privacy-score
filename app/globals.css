@@ -49,6 +49,10 @@ html,
 body {
   background: var(--paper);
   color: var(--ink);
+  /* Decorative elements bleed past the viewport by design (meter glow,
+     celebration burst, the desktop character). Clip so they never add a
+     horizontal scrollbar; clip (not hidden) keeps vertical scroll intact. */
+  overflow-x: clip;
 }
 
 body {

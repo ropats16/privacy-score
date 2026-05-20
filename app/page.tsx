@@ -43,7 +43,9 @@ export default function LandingPage() {
         </Link>
       </header>
 
-      <main className="relative flex-1 flex items-center px-5 md:px-14 py-10 md:py-0 -ml-24">
+      <main className="relative flex-1 flex flex-col items-center lg:flex-row lg:items-center px-5 md:px-14 py-10 lg:py-0 lg:-ml-24">
+        {/* Character — sits below the copy on mobile/tablet (sized to the
+            viewport so the hero stays roughly one screen), beside it on desktop. */}
         <Image
           src="/character_1.png"
           alt=""
@@ -51,16 +53,16 @@ export default function LandingPage() {
           width={1254}
           height={1254}
           priority
-          className="hidden md:block flex-shrink-0 w-[460px] lg:w-[560px] xl:w-[640px] h-auto pointer-events-none select-none -scale-x-100"
+          className="order-2 lg:order-1 mt-auto lg:mt-0 w-auto h-[40dvh] sm:h-[44dvh] lg:h-auto max-w-full lg:max-w-none lg:w-[400px] xl:w-[540px] 2xl:w-[620px] lg:flex-shrink-0 pointer-events-none select-none -scale-x-100"
         />
-        <div className="relative z-10 w-full max-w-[860px] -mt-8 -ml-20">
+        <div className="relative z-10 w-full max-w-[860px] order-1 lg:order-2 lg:-mt-8 lg:-ml-20">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.2, 0.7, 0.1, 1] }}
-            className="flex flex-col gap-10"
+            className="flex flex-col gap-6 sm:gap-8 lg:gap-10"
           >
-            <h1 className="font-display text-[44px] sm:text-[64px] md:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
+            <h1 className="font-display text-[36px] sm:text-[64px] xl:text-[80px] 2xl:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
               a{" "}
               <span className="underline decoration-wavy decoration-[#008cff] decoration-[6px] underline-offset-[0.2em]">
                 privacy
@@ -131,7 +133,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <footer className="px-8 md:px-14 pb-8 pt-16">
+      <footer className="px-8 md:px-14 pb-8 pt-10 lg:pt-16">
         <div className="flex justify-end text-[12px]">
           <Link
             href="/methodology"

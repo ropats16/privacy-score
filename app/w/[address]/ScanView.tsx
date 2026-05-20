@@ -198,7 +198,9 @@ export function ScanView({ address }: { address: string }) {
                 privacy score
               </span>
 
-              <div className="relative origin-center scale-[0.72] sm:scale-[0.85] md:scale-100">
+              {/* Negative margins counteract the CSS scale, which shrinks the
+                  painted pixels but not the layout box the element reserves. */}
+              <div className="relative origin-center scale-[0.72] sm:scale-[0.85] md:scale-100 -m-[59px] sm:-m-[31px] md:m-0">
                 {/* Soft tri-color glow behind the meter so it pops on the page */}
                 <div
                   aria-hidden
