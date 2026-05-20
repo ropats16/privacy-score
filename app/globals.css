@@ -211,3 +211,24 @@ textarea {
   transform: translateY(0.04em);
   user-select: none;
 }
+
+/* Hero squiggle — a hand-tuned wave drawn as a contained pseudo-element so it
+   sits a fixed em-distance under the word and never bleeds into the line
+   below. Sizing is all em-relative, so it scales cleanly with fluid type. */
+.wave-underline {
+  position: relative;
+  white-space: nowrap;
+}
+.wave-underline::after {
+  content: "";
+  position: absolute;
+  left: -0.06em;
+  right: -0.06em;
+  bottom: -0.13em;
+  height: 0.24em;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2012'%3E%3Cpath%20d='M0%206%20Q5%201.5%2010%206%20T20%206%20T30%206%20T40%206'%20fill='none'%20stroke='%23008cff'%20stroke-width='2.4'%20stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left center;
+  background-size: auto 100%;
+  pointer-events: none;
+}

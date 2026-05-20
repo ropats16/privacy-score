@@ -43,17 +43,19 @@ export default function LandingPage() {
         </Link>
       </header>
 
-      <main className="relative flex-1 flex flex-col items-center lg:flex-row lg:items-center px-5 md:px-14 py-10 lg:py-0 lg:-ml-24">
-        {/* Character — sits below the copy on mobile/tablet (sized to the
-            viewport so the hero stays roughly one screen), beside it on desktop. */}
+      <main className="relative flex-1 flex flex-col items-center justify-center lg:flex-row lg:items-center lg:justify-normal px-5 md:px-14 py-8 lg:py-0 lg:-ml-24">
+        {/* Character — sits below the copy on mobile/tablet, beside it on
+            desktop. The PNG is cropped tight to the artwork; a controlled
+            margin (not mt-auto) keeps it tucked under the copy as a centered
+            group rather than drifting to the viewport's bottom edge. */}
         <Image
           src="/character_1.png"
           alt=""
           aria-hidden
-          width={1254}
-          height={1254}
+          width={698}
+          height={717}
           priority
-          className="order-2 lg:order-1 mt-auto lg:mt-0 w-auto h-[40dvh] sm:h-[44dvh] lg:h-auto max-w-full lg:max-w-none lg:w-[400px] xl:w-[540px] 2xl:w-[620px] lg:flex-shrink-0 pointer-events-none select-none -scale-x-100"
+          className="order-2 lg:order-1 mt-[clamp(1.25rem,4.5vh,2.75rem)] lg:mt-0 w-auto h-[clamp(9.5rem,27dvh,15.5rem)] sm:h-[34dvh] lg:h-auto max-w-full lg:max-w-none lg:w-[400px] xl:w-[540px] 2xl:w-[620px] lg:flex-shrink-0 pointer-events-none select-none -scale-x-100"
         />
         <div className="relative z-10 w-full max-w-[860px] order-1 lg:order-2 lg:-mt-8 lg:-ml-20">
           <motion.div
@@ -62,19 +64,15 @@ export default function LandingPage() {
             transition={{ duration: 0.7, ease: [0.2, 0.7, 0.1, 1] }}
             className="flex flex-col gap-6 sm:gap-8 lg:gap-10"
           >
-            <h1 className="font-display text-[36px] sm:text-[64px] xl:text-[80px] 2xl:text-[96px] leading-[0.95] tracking-[-0.02em] text-ink">
-              a{" "}
-              <span className="underline decoration-wavy decoration-[#008cff] decoration-[6px] underline-offset-[0.2em]">
-                privacy
-              </span>{" "}
-              checkup
+            <h1 className="font-display text-[clamp(2rem,0.4rem+8vw,4rem)] xl:text-[5rem] 2xl:text-[6rem] leading-[1.05] tracking-[-0.02em] text-balance text-ink">
+              a <span className="wave-underline">privacy</span> checkup
               <br />
               <span className="font-italic-serif text-ink">
                 for your wallet.
               </span>
             </h1>
 
-            <p className="font-sans text-[15px] sm:text-[16px] leading-[1.6] text-muted max-w-[640px] -mt-4">
+            <p className="font-sans text-[clamp(0.9375rem,0.875rem+0.3vw,1.0625rem)] leading-[1.6] text-muted max-w-[40rem] sm:-mt-4">
               we&rsquo;ll spend about thirty seconds reading 3 months of public
               onchain activity and give you a privacy score between 0 and 100.
               higher means more private. learn privacy by doing.
@@ -92,27 +90,27 @@ export default function LandingPage() {
                   placeholder="paste a solana address, or a .sol name"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="input-bare flex-1 min-w-0 text-[18px] sm:text-[24px] md:text-[28px] text-ink leading-tight"
+                  className="input-bare flex-1 min-w-0 text-[clamp(1.125rem,0.7rem+2.2vw,1.75rem)] text-ink leading-tight"
                   aria-label="solana address or .sol name"
                   disabled={busy}
                 />
                 <button
                   type="submit"
                   disabled={busy || !value.trim()}
-                  className="font-sans text-[14px] sm:text-[15px] md:text-[16px] leading-none text-paper bg-ink hover:bg-ink-soft rounded-full px-5 py-3 md:px-6 md:py-3.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-ring whitespace-nowrap"
+                  className="font-sans text-[clamp(0.875rem,0.8rem+0.35vw,1rem)] leading-none text-paper bg-ink hover:bg-ink-soft rounded-full px-5 py-3 md:px-6 md:py-3.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-ring whitespace-nowrap"
                 >
                   {busy ? "resolving…" : "check score"}
                 </button>
               </div>
               {error && (
-                <p className="text-[14px] text-[color:var(--score-low)]">
+                <p className="text-[0.875rem] text-[color:var(--score-low)]">
                   {error}
                 </p>
               )}
             </form>
 
             {lastScan && (
-              <div className="flex items-center gap-3 flex-wrap text-[13px] -mt-3">
+              <div className="flex items-center gap-3 flex-wrap text-[0.8125rem] sm:-mt-3">
                 <span className="text-muted">last scan this session</span>
                 <Link
                   href={`/w/${lastScan.address}`}
@@ -133,7 +131,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <footer className="px-8 md:px-14 pb-8 pt-10 lg:pt-16">
+      <footer className="px-8 md:px-14 pb-8 pt-8 lg:pt-16">
         <div className="flex justify-end text-[12px]">
           <Link
             href="/methodology"
