@@ -173,9 +173,12 @@ function FactorModalInner({
 
         {/* Rubric */}
         {rubric && (
-          <section className="px-6 md:px-8 py-5 flex flex-col gap-3 border-b border-rule-soft">
+          <section
+            className="px-6 md:px-8 py-5 flex flex-col gap-3 border-b border-rule-soft"
+            style={{ background: "var(--paper)" }}
+          >
             <span className="text-[10.5px] tracking-[0.22em] lowercase text-muted">
-              rubric · how this is scored
+              how this is scored
             </span>
             <p className="text-[13.5px] leading-[1.55] text-ink-soft max-w-[58ch]">
               {rubric.measures}

@@ -14,7 +14,6 @@ const SEV_LABEL: Record<Severity, string> = {
 };
 
 const BRAND = "var(--brand)";
-const BRAND_SOFT = "var(--brand-soft)";
 
 export function LeakReasonsList({ reasons }: { reasons: LeakReason[] }) {
   if (reasons.length === 0) {
@@ -150,9 +149,9 @@ function LiftBadge({ value }: { value: number }) {
     <span
       className="inline-flex items-center gap-1 tabular px-2.5 py-1 rounded-full text-[12px] font-medium"
       style={{
-        color: positive ? BRAND : "var(--muted-2)",
-        background: positive ? BRAND_SOFT : "rgba(20,17,13,0.04)",
-        boxShadow: positive ? "inset 0 0 0 1px rgba(0,140,255,0.30)" : "none",
+        color: positive ? "var(--score-high)" : "var(--muted-2)",
+        background: positive ? "var(--score-high-soft)" : "rgba(20,17,13,0.04)",
+        boxShadow: positive ? "inset 0 0 0 1px rgba(2,201,121,0.30)" : "none",
       }}
       title="estimated lift to total score"
     >

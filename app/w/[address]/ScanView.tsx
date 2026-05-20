@@ -45,7 +45,7 @@ type Phase = "scanning" | "done" | "error";
 const MISSING_KEY_MSG =
   "NEXT_PUBLIC_HELIUS_API_KEY is not set. Add it to .env.local and restart the dev server.";
 
-export function ScanView({ address }: { address: string }) {
+export function ScanView({ address, sns }: { address: string; sns?: string }) {
   const hasKey = HELIUS_KEY.length > 0;
   const [phase, setPhase] = useState<Phase>(hasKey ? "scanning" : "error");
   const [error, setError] = useState<string | null>(
@@ -133,11 +133,6 @@ export function ScanView({ address }: { address: string }) {
             <span aria-hidden className="wordmark-eye">👀</span>
           </span>
         </Link>
-        <nav className="text-[13px] text-muted flex items-center gap-4 md:gap-6">
-          <Link href="/" className="hover:text-ink transition-colors">
-            scan another
-          </Link>
-        </nav>
       </header>
 
       <main className="flex-1 px-5 md:px-14 py-10 md:py-14">
@@ -148,7 +143,7 @@ export function ScanView({ address }: { address: string }) {
               <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted flex-wrap">
                 <span aria-hidden className="w-8 h-px bg-rule" />
                 <span className="lowercase tracking-normal text-[12px] not-italic">
-                  last {windowReadable()}
+                  scan period · {windowReadable()}
                 </span>
                 <span aria-hidden className="text-muted-2">·</span>
                 <span
@@ -159,19 +154,26 @@ export function ScanView({ address }: { address: string }) {
                   watch only
                 </span>
               </div>
-              <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
-                <span className="text-muted">your privacy score · </span>
-                <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
-                  {shortAddress(address, 6, 6)}
-                </span>
-              </h2>
+              <div className="flex flex-col gap-1.5 min-w-0">
+                <h2 className="font-display text-[28px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-ink break-words">
+                  <span className="text-muted">privacy score · </span>
+                  <span className="font-mono text-[18px] md:text-[28px] tracking-tight align-baseline text-ink">
+                    {sns ?? shortAddress(address, 6, 6)}
+                  </span>
+                </h2>
+                {sns && (
+                  <span className="font-mono text-[12px] md:text-[13px] tracking-tight text-muted break-all">
+                    {address}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="md:ml-auto md:self-end shrink-0">
               <button
                 type="button"
                 onClick={reScan}
                 disabled={phase === "scanning"}
-                className="inline-flex items-center gap-2 text-[12px] tracking-[0.2em] lowercase text-ink hover:text-accent disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring rounded-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-rule px-4 py-2 text-[12px] tracking-[0.2em] lowercase text-muted hover:border-ink hover:text-ink disabled:text-muted-2 disabled:cursor-not-allowed transition-colors focus-ring"
               >
                 <span
                   aria-hidden
@@ -179,13 +181,7 @@ export function ScanView({ address }: { address: string }) {
                 >
                   ↻
                 </span>
-                <span>
-                  {phase === "scanning"
-                    ? "Re scanning…"
-                    : prevForThis
-                      ? "Re scan"
-                      : "Re scan after a fix"}
-                </span>
+                <span>{phase === "scanning" ? "rescanning…" : "rescan"}</span>
               </button>
             </div>
           </div>
@@ -291,7 +287,7 @@ export function ScanView({ address }: { address: string }) {
                       }
                     />
                   );
-                return <PendingChip key={k} title={titleFor(k)} weight={WEIGHTS[k]} />;
+                return <PendingChip key={k} title={titleFor(k)} />;
               }
             )}
           </section>
@@ -299,14 +295,9 @@ export function ScanView({ address }: { address: string }) {
           {/* Try these fixes */}
           {scan && (
             <section className="flex flex-col gap-5">
-              <div className="flex items-baseline justify-between gap-4">
-                <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted">
-                  <span aria-hidden className="w-8 h-px bg-rule" />
-                  <span>try these fixes</span>
-                </div>
-                <span className="text-[12px] text-muted-2">
-                  ranked by score lift
-                </span>
+              <div className="flex items-baseline gap-3 text-[12px] tracking-[0.22em] lowercase text-muted">
+                <span aria-hidden className="w-8 h-px bg-rule" />
+                <span>recommend fixes</span>
               </div>
               <LeakReasonsList reasons={scan.leakReasons} />
             </section>
@@ -366,12 +357,11 @@ function titleFor(k: keyof typeof WEIGHTS): string {
   }
 }
 
-function PendingChip({ title, weight }: { title: string; weight: number }) {
+function PendingChip({ title }: { title: string }) {
   return (
     <div className="card-soft p-5 flex flex-col gap-4 pulse-soft">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
         <span className="text-[13px] text-ink/70 truncate">{title}</span>
-        <span className="text-[11px] tabular text-muted-2">w {weight}</span>
       </div>
       <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
         <div className="flex flex-col gap-2">

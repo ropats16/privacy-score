@@ -21,11 +21,17 @@ export default function LandingPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!value.trim()) return;
+    const trimmed = value.trim();
+    if (!trimmed) return;
     setBusy(true);
     try {
-      const addr = await resolveAddressInput(value);
-      router.push(`/w/${addr}`);
+      const addr = await resolveAddressInput(trimmed);
+      const sns = trimmed.toLowerCase().endsWith(".sol")
+        ? trimmed.toLowerCase()
+        : null;
+      router.push(
+        sns ? `/w/${addr}?sns=${encodeURIComponent(sns)}` : `/w/${addr}`
+      );
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "something went wrong.");
       setBusy(false);

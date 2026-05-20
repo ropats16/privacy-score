@@ -53,29 +53,26 @@ export function SubScoreChip({
             <FactorIcon k={factor.key} size={15} />
           </span>
           <span className="text-[13px] text-ink truncate">{factor.title}</span>
-          <span className="ml-auto inline-flex items-center gap-2 text-[10.5px] tracking-[0.2em] lowercase text-muted-2 tabular">
-            <span>w {factor.weight}</span>
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              aria-label={`Details for ${factor.title}`}
-              className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-rule text-muted hover:border-ink hover:text-ink transition-colors focus-ring"
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label={`Details for ${factor.title}`}
+            className="ml-auto shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full border border-rule text-muted hover:border-ink hover:text-ink transition-colors focus-ring"
+          >
+            <svg
+              aria-hidden
+              width="11"
+              height="11"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
             >
-              <svg
-                aria-hidden
-                width="11"
-                height="11"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              >
-                <circle cx="8" cy="4.5" r="0.6" fill="currentColor" />
-                <path d="M8 7.5v5" />
-              </svg>
-            </button>
-          </span>
+              <circle cx="8" cy="4.5" r="0.6" fill="currentColor" />
+              <path d="M8 7.5v5" />
+            </svg>
+          </button>
         </div>
 
         {/* Body: score + band + vertical gauge */}
