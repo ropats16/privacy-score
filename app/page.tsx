@@ -48,7 +48,7 @@ export default function LandingPage() {
             width={1080}
             height={1080}
             priority
-            className="h-16 w-16 md:h-20 md:w-20"
+            className="h-20 w-20 md:h-28 md:w-28"
           />
         </Link>
       </header>
