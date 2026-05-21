@@ -232,3 +232,92 @@ textarea {
   background-size: auto 100%;
   pointer-events: none;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Retro popup ads — scan view only. A deliberate Web-1.0 gag:
+   Win95-style window chrome, a blinking CTA, a <marquee>-style
+   scroll. Clashes with the editorial palette on purpose. Every
+   animation is dropped under prefers-reduced-motion. */
+@keyframes retroBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.12; }
+}
+@keyframes retroMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes retroThrob {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes retroRainbow {
+  0% { color: #ff3e00; }
+  25% { color: #ffcd6c; }
+  50% { color: #02c979; }
+  75% { color: #4db5ff; }
+  100% { color: #ff3e00; }
+}
+@keyframes retroPopIn {
+  0% { transform: scale(0.4) rotate(-7deg); opacity: 0; }
+  72% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.retro-ad {
+  font-family: "Courier New", ui-monospace, monospace;
+  text-transform: none;
+  letter-spacing: 0;
+  background: #11163a;
+  color: #f4f1e6;
+  border: 2px solid #05060f;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.38),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+    5px 5px 0 rgba(5, 6, 15, 0.32);
+  animation: retroPopIn 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.25) both;
+}
+
+.retro-bar {
+  background: linear-gradient(90deg, #000a8c 0%, #2f6dff 100%);
+  color: #ffffff;
+}
+
+.retro-knob {
+  background: #cdc8b6;
+  color: #14110d;
+  border: 1px solid #05060f;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.85),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.retro-cta {
+  background: #ffcd6c;
+  color: #14110d;
+  border: 2px solid #05060f;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.8),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.38);
+}
+
+.retro-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.retro-marquee > span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: retroMarquee 9s linear infinite;
+}
+
+.retro-blink { animation: retroBlink 0.9s linear infinite; }
+.retro-throb { animation: retroThrob 1.5s ease-in-out infinite; }
+.retro-rainbow { animation: retroRainbow 2.4s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .retro-ad,
+  .retro-blink,
+  .retro-throb,
+  .retro-rainbow { animation: none; }
+  .retro-marquee > span { animation: none; padding-left: 0; }
+}
