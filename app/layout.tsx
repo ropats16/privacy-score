@@ -22,7 +22,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "sneak peek · see what your solana wallet shows",
+  title: "how public is your wallet · see what your solana wallet shows",
   description:
     "audit any solana wallet. get a privacy score 0 to 100, understand the leaks in plain english, fix them.",
 };

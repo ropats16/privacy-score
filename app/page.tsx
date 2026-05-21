@@ -43,7 +43,7 @@ export default function LandingPage() {
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
         <Link href="/" className="group">
           <span className="wordmark text-[20px] md:text-[22px]">
-            sneak peek
+            how public is your wallet
             <span aria-hidden className="wordmark-eye">👀</span>
           </span>
         </Link>

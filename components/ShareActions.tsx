@@ -47,7 +47,7 @@ export function ShareActions({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `sneakpeek-${shortFile(address)}-${score}.png`;
+      a.download = `how-public-is-your-wallet-${shortFile(address)}-${score}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();

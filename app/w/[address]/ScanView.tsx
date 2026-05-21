@@ -129,7 +129,7 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
         <Link href="/" className="group">
           <span className="wordmark text-[20px] md:text-[22px]">
-            sneak peek
+            how public is your wallet
             <span aria-hidden className="wordmark-eye">👀</span>
           </span>
         </Link>
@@ -333,7 +333,7 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
 
       <footer className="px-8 md:px-14 pb-8 pt-10">
         <div className="flex flex-col md:flex-row justify-between gap-4 text-[12px] text-muted">
-          <div>© sneak peek 2026</div>
+          <div>© how public is your wallet 2026</div>
         </div>
       </footer>
     </div>

@@ -63,7 +63,7 @@ export default function MethodologyPage() {
       <header className="flex items-center justify-between px-8 md:px-14 pt-8">
         <Link href="/" className="group">
           <span className="wordmark text-[20px] md:text-[22px]">
-            sneak peek
+            how public is your wallet
             <span aria-hidden className="wordmark-eye">👀</span>
           </span>
         </Link>
