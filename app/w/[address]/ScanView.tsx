@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -127,11 +128,15 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
   return (
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
-        <Link href="/" className="group">
-          <span className="wordmark text-[20px] md:text-[22px]">
-            how public is your wallet
-            <span aria-hidden className="wordmark-eye">👀</span>
-          </span>
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="how public is your wallet"
+            width={1080}
+            height={1080}
+            priority
+            className="h-16 w-16 md:h-20 md:w-20"
+          />
         </Link>
       </header>
 

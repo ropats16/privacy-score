@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { RUBRICS, RUBRIC_BY_FACTOR, WEIGHTS } from "@/lib/rubrics";
 import type { FactorKey } from "@/lib/types";
 
@@ -61,11 +62,15 @@ export default function MethodologyPage() {
   return (
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between px-8 md:px-14 pt-8">
-        <Link href="/" className="group">
-          <span className="wordmark text-[20px] md:text-[22px]">
-            how public is your wallet
-            <span aria-hidden className="wordmark-eye">👀</span>
-          </span>
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="how public is your wallet"
+            width={1080}
+            height={1080}
+            priority
+            className="h-16 w-16 md:h-20 md:w-20"
+          />
         </Link>
         <nav className="text-[13px] text-muted">
           <Link href="/" className="hover:text-ink transition-colors">

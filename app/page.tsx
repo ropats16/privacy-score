@@ -30,7 +30,7 @@ export default function LandingPage() {
         ? trimmed.toLowerCase()
         : null;
       router.push(
-        sns ? `/w/${addr}?sns=${encodeURIComponent(sns)}` : `/w/${addr}`
+        sns ? `/w/${addr}?sns=${encodeURIComponent(sns)}` : `/w/${addr}`,
       );
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "something went wrong.");
@@ -41,11 +41,15 @@ export default function LandingPage() {
   return (
     <div className="relative z-10 flex-1 flex flex-col">
       <header className="flex items-center justify-between gap-3 px-5 md:px-14 pt-6 md:pt-8 flex-wrap">
-        <Link href="/" className="group">
-          <span className="wordmark text-[20px] md:text-[22px]">
-            how public is your wallet
-            <span aria-hidden className="wordmark-eye">👀</span>
-          </span>
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="how public is your wallet"
+            width={1080}
+            height={1080}
+            priority
+            className="h-16 w-16 md:h-20 md:w-20"
+          />
         </Link>
       </header>
 
