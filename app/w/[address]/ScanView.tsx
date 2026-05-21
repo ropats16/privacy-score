@@ -30,6 +30,7 @@ import { shortAddress } from "@/lib/resolve";
 import { useScanStore } from "@/lib/scan-store";
 import {
   classifyScanError,
+  clearScanCount,
   track,
   trackScanCompleted,
 } from "@/lib/analytics/track";
@@ -116,8 +117,11 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
   }, [address, hasKey, trigger, setScan]);
 
   const reScan = useCallback(() => {
+    // A rescan is a deliberate new scan: drop the per-session dedup marker so
+    // this completion counts even though the address was already counted.
+    clearScanCount(address);
     setTrigger((n) => n + 1);
-  }, []);
+  }, [address]);
 
   // Celebrate when a re-scan improved the total — derived from current state
   // so it re-fires whenever a new improving scan lands (key = scannedAt).

@@ -108,12 +108,50 @@ export async function hashWallet(address: string): Promise<string | null> {
   }
 }
 
+// scan_completed is deduped per browser session: a /w/[address] page re-runs
+// its full scan on every load (the scan store is in-memory), so without this a
+// refresh or back-navigation would count as a fresh scan. sessionStorage is
+// tab-scoped and cleared on tab close — not a cookie, not cross-day tracking.
+// An explicit rescan clears the marker via clearScanCount() so it recounts.
+const SCAN_COUNTED_PREFIX = "hpiyw:scan-counted:";
+
+function scanAlreadyCounted(address: string): boolean {
+  try {
+    return sessionStorage.getItem(SCAN_COUNTED_PREFIX + address) !== null;
+  } catch {
+    return false;
+  }
+}
+
+function markScanCounted(address: string): void {
+  try {
+    sessionStorage.setItem(SCAN_COUNTED_PREFIX + address, "1");
+  } catch {
+    // sessionStorage disabled / full — dedup is best-effort, never blocks.
+  }
+}
+
+/** Drop the dedup marker for an address so its next completion counts again.
+ *  Call on an explicit rescan — a rescan is a deliberate new scan. */
+export function clearScanCount(address: string): void {
+  try {
+    sessionStorage.removeItem(SCAN_COUNTED_PREFIX + address);
+  } catch {
+    // best-effort
+  }
+}
+
 /** Build and send a `scan_completed` event from a finished scan. */
 export async function trackScanCompleted(
   scan: Scan,
   durationMs: number,
 ): Promise<void> {
   try {
+    // Count once per address per session; an explicit rescan clears the
+    // marker first (see clearScanCount) so deliberate rescans still count.
+    if (scanAlreadyCounted(scan.address)) return;
+    markScanCounted(scan.address);
+
     const scoreByKey = new Map(scan.factors.map((f) => [f.key, f.score]));
 
     let weakestKey = scan.factors[0]?.key ?? "identity";
