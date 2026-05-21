@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { resolveAddressInput, shortAddress } from "@/lib/resolve";
 import { useScanStore } from "@/lib/scan-store";
+import { classifyInput, track } from "@/lib/analytics/track";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -24,8 +25,10 @@ export default function LandingPage() {
     const trimmed = value.trim();
     if (!trimmed) return;
     setBusy(true);
+    const inputType = classifyInput(trimmed);
     try {
       const addr = await resolveAddressInput(trimmed);
+      track("scan_started", { inputType });
       const sns = trimmed.toLowerCase().endsWith(".sol")
         ? trimmed.toLowerCase()
         : null;
@@ -33,6 +36,9 @@ export default function LandingPage() {
         sns ? `/w/${addr}?sns=${encodeURIComponent(sns)}` : `/w/${addr}`,
       );
     } catch (err: unknown) {
+      track("scan_failed", {
+        errorType: inputType === "sns" ? "sns_unresolved" : "invalid_address",
+      });
       setError(err instanceof Error ? err.message : "something went wrong.");
       setBusy(false);
     }

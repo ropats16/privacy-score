@@ -28,6 +28,11 @@ import {
 import { WEIGHTS } from "@/lib/rubrics";
 import { shortAddress } from "@/lib/resolve";
 import { useScanStore } from "@/lib/scan-store";
+import {
+  classifyScanError,
+  track,
+  trackScanCompleted,
+} from "@/lib/analytics/track";
 import { CircularScore } from "@/components/CircularScore";
 import { SubScoreChip } from "@/components/SubScoreChip";
 import { LeakReasonsList } from "@/components/LeakReasonsList";
@@ -81,15 +86,29 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
   useEffect(() => {
     if (!hasKey) return;
     const ac = new AbortController();
+    const startedAt = performance.now();
 
     runScan(address, ac.signal)
       .then((scan) => {
         if (ac.signal.aborted) return;
+        // Snapshot the prior scan before the store swaps it — a same-address
+        // prior scan means this completion is a re-scan comparison.
+        const previousScan = useScanStore.getState().current;
         setScan(scan);
         setPhase("done");
+        void trackScanCompleted(scan, performance.now() - startedAt);
+        if (previousScan && previousScan.address === address) {
+          const delta = scan.totalScore - previousScan.totalScore;
+          track("comparison_run", {
+            direction: delta > 0 ? "up" : delta < 0 ? "down" : "same",
+          });
+        }
       })
       .catch((err: unknown) => {
         if (ac.signal.aborted) return;
+        track("scan_failed", {
+          errorType: classifyScanError(err, "rpc_error"),
+        });
         setError(err instanceof Error ? err.message : "scan failed.");
         setPhase("error");
       });

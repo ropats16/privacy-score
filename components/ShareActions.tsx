@@ -4,6 +4,7 @@
 // Both routes pass everything as query params, we never persist anything.
 
 import { useCallback, useMemo, useState } from "react";
+import { track } from "@/lib/analytics/track";
 
 type Props = {
   address: string;
@@ -38,6 +39,7 @@ export function ShareActions({
   const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetCopy)}`;
 
   const downloadPng = useCallback(async () => {
+    track("share_clicked", { method: "download" });
     setError(null);
     setDownloading(true);
     try {
@@ -104,6 +106,7 @@ export function ShareActions({
               href={intentUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track("share_clicked", { method: "x" })}
               className="inline-flex items-center justify-between gap-3 border border-ink/80 px-4 py-3 text-[13px] tracking-[0.2em] lowercase text-ink hover:bg-ink hover:text-paper transition-colors focus-ring rounded-sm"
             >
               <span>share on x</span>

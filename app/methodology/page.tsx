@@ -208,10 +208,16 @@ export default function MethodologyPage() {
             </h2>
             <div className="card-soft px-6 md:px-8 py-6">
               <p className="text-[14px] text-ink-soft leading-relaxed max-w-[62ch]">
-                no database. no auth. no cookies that link wallet to session.
-                no third party analytics in v1. the only server side state we
-                keep is the public ofac list cached at the edge. share cards
-                are rendered on demand from url params and not retained.
+                no user database. no login. no cookies, and no cross-day
+                tracking. we keep first-party, anonymous, aggregate-only
+                analytics on our own infrastructure &mdash; page views, scan
+                counts, score distributions &mdash; never your wallet address,
+                never an ip, never shared with a third party. unique visitor
+                and wallet counts are computed with hyperloglog sketches that
+                cannot be inverted back to a person or an address. the other
+                server side state we keep is the public ofac list cached at the
+                edge. share cards are rendered on demand from url params and
+                not retained.
               </p>
             </div>
           </section>
