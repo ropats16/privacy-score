@@ -40,6 +40,7 @@ import { LeakReasonsList } from "@/components/LeakReasonsList";
 // import { DustPanel } from "@/components/DustPanel";
 // import { ShareActions } from "@/components/ShareActions";
 import { ScanTips } from "@/components/ScanTips";
+import { RetroAds } from "@/components/RetroAds";
 import type {
   DustWarning,
   Factor,
@@ -364,6 +365,8 @@ export function ScanView({ address, sns }: { address: string; sns?: string }) {
           <div>© how public is your wallet 2026</div>
         </div>
       </footer>
+
+      <RetroAds />
     </div>
   );
 }
